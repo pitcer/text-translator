@@ -248,13 +248,24 @@ const Translator = new Lang.Class({
           return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
         }
 
+        function htmlEscape(str) {
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
         let stuff = {
             "\x1B[1m" : '<b>',
             "\x1B[22m" : '</b>',
             "\x1B[4m" : '<u>',
             "\x1B[24m" : '</u>'
         }
+        
         try {
+            data = htmlEscape(data)
             for (let hex in stuff) {
                 data = replaceAll(data, hex, stuff[hex]);
             }

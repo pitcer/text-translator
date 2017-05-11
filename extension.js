@@ -801,11 +801,6 @@ const TranslatorExtension = new Lang.Class({
     },
 
     _add_topbar_buttons: function() {
-        let translate_label = new ButtonsBar.ButtonsBarLabel(
-            ' ',
-            'tranlator-top-bar-button'
-        );
-        this._dialog.topbar.add_button(translate_label);
 
         this._source_lang_button = this._get_source_lang_button();
         this._dialog.topbar.add_button(this._source_lang_button);

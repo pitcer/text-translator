@@ -77,7 +77,7 @@ const EntryBase = new Lang.Class({
         });
         this._box.add(this._entry, {
             y_align: St.Align.START,
-            y_fill: false
+            y_fill: true,
         });
 
         this.scroll.add_actor(this._box);
@@ -250,18 +250,6 @@ const TargetEntry = new Lang.Class({
         });
 
         this._clutter_text.set_editable(false);
-        this.actor.connect('button-press-event', Lang.bind(this, function() {
-            this._clutter_text.set_editable(true);
-        }));
-        this._clutter_text.connect('button-press-event',
-            Lang.bind(this, function() {
-                this._clutter_text.set_editable(true);
-                this._clutter_text.grab_key_focus();
-            })
-        );
-        this._clutter_text.connect('key-focus-out', Lang.bind(this, function() {
-            this._clutter_text.set_editable(false);
-        }));
     },
 });
 
@@ -515,8 +503,8 @@ const TranslatorDialog = new Lang.Class({
             );
         }
 
-        this._source.set_size(text_box_width, text_box_height);
-        this._target.set_size(text_box_width, text_box_height)
+        this._source.set_size(text_box_width, text_box_height - 100);
+        this._target.set_size(text_box_width, text_box_height - 100)
     },
 
     sync_entries_scroll: function() {

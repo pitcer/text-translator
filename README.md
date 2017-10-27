@@ -4,8 +4,16 @@ Translation of the text by different translators (currently [Google.Translate](h
 
 ### Installing translate-shell
 
-This extension needs the package translate-shell. For install instructions see [translate-shell#installation](https://github.com/soimort/translate-shell#installation).
-*Make sure your version of translate-shell is over 0.9.5-1, otherwise it might cause issues.*
+This extension needs the package translate-shell.
+
+#### Install translate-shell
+```
+cd /usr/bin
+sudo wget https://git.io/trans
+sudo chmod a+x trans
+```
+For full install instructions see [translate-shell#installation](https://github.com/soimort/translate-shell#installation).
+*If you have trouble using translate-shell, make sure your version of translate-shell is over 0.9.5-1, otherwise it might cause issues.*
 
 ### Installation
 

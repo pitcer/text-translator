@@ -1,29 +1,32 @@
 .translator-box {
-    background-color: #222224;
-    padding: 20px;
-    color: #fff;
-    font-family: 'ubuntu', 'sans-serif';
-    border-radius: 3px;
-    border: 1px solid #111;
+    /*background-color: #f00;*/
+    /*padding: 20px;*/
+    /*color: #fff;*/
+    /*font-family: 'ubuntu', 'sans-serif';*/
+    /*border-radius: 3px;*/
+    /*border: 1px solid #111;*/
 }
 
 .translator-source-text-box, .translator-target-text-box {
-    background: #1a1a1a;
-    border: 1px solid #333;
+    /*background: #0f0;*/
+    /*border: 1px solid #333;*/
     overflow: hidden;
-    margin: 0;
-    padding: 3px;
+    /*margin: 0;*/
+    /*padding: 30px;*/
     /*border-radius: 3px;*/
 }
-.translator-source-text-box { margin-right: 10px }
-.translator-target-text-box { margin-left: 10px }
+/*.translator-source-text-box { margin-right: 10px }
+.translator-target-text-box { margin-left: 10px }*/
 
 .translator-entry {
-    caret-color: #0af;
-    caret-size: 2px;
-    selected-color: black;
-    background: transparent;
-    color: #eee;
+    /*caret-color: #0af;*/
+    /*caret-size: 2px;*/
+    /*selected-color: black;*/
+    /*background: transparent;*/
+    padding: 10px;
+    /*color: #eee;*/
+    /*height: 100%;*/
+    /*background: #00f;*/
 }
 
 .translator-statusbar-box {
@@ -39,121 +42,123 @@
     margin: 4px;
 }
 .translator-buttons-bar-icon:hover {
-    color: #0af;
+    /*color: #0af;*/
 }
 .translator-buttons-bar-icon:active {
-    color: #f00;
+    /*color: #f00;*/
 }
 
 .translator-top-bar-box {
 }
 
 .tranlator-top-bar-button {
-    font-size: 23px;
-    font-weight: bold;
+    /*font-size: 23px;*/
+    padding: 0;
+    margin: 0;
+    /*font-weight: bold;*/
 }
 
 .tranlator-top-bar-button-reactive {
-    font-size: 23px;
-    font-weight: bold;
+    /*font-size: 23px;*/
+    /*font-weight: bold;*/
 }
 
 .tranlator-top-bar-button-reactive:hover {
-    color: #0af;
+    /*color: #0af;*/
 }
 
 .tranlator-top-bar-button-reactive:active {
-    color: #0af;
+    /*color: #0af;*/
 }
 
 .tranlator-top-bar-go-button {
     font-size: 20px;
     font-weight: bold;
     padding: 0 10px;
-    border: 1px solid #aaa;
+    /*border: 1px solid #aaa;*/
 }
 
 .tranlator-top-bar-go-button:hover {
-    background-color: #0af;
+    /*background-color: #0af;*/
 }
 
 .tranlator-top-bar-go-button:active {
-    background-color: rgba(0, 0, 255, 1);
+    /*background-color: rgba(0, 0, 255, 1);*/
 }
 
 .translator-dialog-menu-button {
-    padding-top: 2px;
-    color: #555;
+    /*padding-top: 2px;*/
+    /*color: #555;*/
 }
 
 .translator-dialog-menu-button:hover {
-    color: #f55;
+    /*color: #f55;*/
 }
 
 .translator-dialog-menu-button:active {
-    color: #f00;
+    /*color: #f00;*/
 }
 
 .translator-dialog-menu-toggle-button {
-    padding-top: 2px;
-    color: #555;
+    /*padding-top: 2px;*/
+    /*color: #555;*/
 }
 
 .translator-dialog-menu-toggle-button:hover {
-    color: #5f5;
+    /*color: #5f5;*/
 }
 
 .translator-dialog-menu-toggle-button:active {
-    color: #0f0;
+    /*color: #0f0;*/
 }
 
 .translator-language-chooser {
-    background-color: #1a1a1a;
-    padding: 20px;
-    border-radius: 4px;
-    border: 1px solid #444;
+    /*background-color: #1a1a1a;*/
+    /*padding: 20px;*/
+    /*border-radius: 4px;*/
+    /*border: 1px solid #444;*/
 }
 
 .translator-language-chooser-box {
-    border: 1px solid #222;
-    background-color: #181818;
-    margin: 10px 0;
+    /*border: 1px solid #222;*/
+    /*background-color: #181818;*/
+    /*margin: 10px 0;*/
 }
 
 .translator-language-chooser-title {
-    color: #eee;
-    font-size: 17px;
+    /*color: #eee;*/
+    /*font-size: 17px;*/
     font-weight: bold;
 }
 
 .translator-language-chooser-entry {
-    size: 10px;
-    color: #fff;
-    padding: 3px;
-    width: 150px;
-    background-color: rgba(64, 64, 64, 0.5);
-    caret-color: rgb(0, 0, 0);
-    caret-size: 2px;
-    selected-color: white;
+    /*size: 10px;*/
+    /*color: #fff;*/
+    padding: 10px;
+    /*width: 150px;*/
+    /*background-color: rgba(64, 64, 64, 0.5);*/
+    /*caret-color: rgb(0, 0, 0);*/
+    /*caret-size: 2px;*/
+    /*selected-color: white;*/
 }
 
 .translator-language-chooser-button {
-    padding: 3px;
-    font-size: 16px;
-    color: #fff;
+    padding: 5px;
+    /*font-size: 16px;*/
+    /*color: #fff;*/
 }
 
 .translator-language-chooser-button:hover {
-    background-color: rgba(64, 64, 64, 0.3);
+    /*background-color: rgba(64, 64, 64, 0.3);*/
 }
 
 .translator-language-chooser-button:active {
-    font-weight: bold;
-    background-color: rgba(64, 64, 64, 0.3);
+    /*font-weight: bold;*/
+    /*background-color: rgba(64, 64, 64, 0.3);*/
 }
 
 .translator-chars-counter-box {
-    font-size: 13px;
+    /*font-size: 13px;*/
     padding: 5px;
 }
 
@@ -162,63 +167,63 @@
 }
 
 .translator-help-box {
-    border: 1px solid #222;
-    background-color: #181818;
-    margin: 10px 0;
+    /*border: 1px solid #222;*/
+    /*background-color: #181818;*/
+    /*margin: 10px 0;*/
 }
 
 .translator-help-text {
-    font-size: 15px;
-    padding: 15px;
-    color: #eee;
+    /*font-size: 15px;*/
+    /*padding: 15px;*/
+    /*color: #eee;*/
 }
 
 .translator-translators-popup-escape-label {
-    padding-left: 10px;
-    padding-top: 5px;
-    size: 5px;
-    font-style: italic;
-    color: grey;
+    /*padding-left: 10px;*/
+    /*padding-top: 5px;*/
+    /*size: 5px;*/
+    /*font-style: italic;*/
+    /*color: grey;*/
 }
 
 .translator-langs-buttons-label {
-    padding-left: 10px;
-    padding-bottom: 5px;
-    font-style: italic;
-    color: rgb(160, 160, 160);
-    font-size: 15px;
+    /*padding-left: 10px;*/
+    /*padding-bottom: 5px;*/
+    /*font-style: italic;*/
+    /*color: rgb(160, 160, 160);*/
+    /*font-size: 15px;*/
 }
 
 .translator-langs-buttons-box {
-    padding-left: 10px;
-    padding-bottom: 5px;
-    padding-top: 5px;
+    /*padding-left: 10px;*/
+    /*padding-bottom: 5px;*/
+    padding: 15px 0 5px;
 }
 
 .translator-lang-button-box {
-    padding: 0 5px;
+    padding: 5px;
 }
 
 .translator-lang-button {
-    font-size: 14px;
-    color: #fff;
+    /*font-size: 14px;*/
+    /*color: #fff;*/
 }
 
 .translator-lang-button:hover {
 }
 
 .translator-lang-button:active {
-    color: #0af;
+    /*color: #0af;*/
 }
 
 .listen-button {
     margin-top: 10px;
-    color: #555;
+    /*color: #555;*/
 }
 
 .listen-button:hover {
     color: #0af;
-    text-shadow: 0 0 10px #fff;
+    /*text-shadow: 0 0 10px #fff;*/
 }
 
 .listen-button:active {

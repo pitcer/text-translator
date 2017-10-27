@@ -28,15 +28,15 @@
               "default_target":"ru",
               "last_source":"",
               "last_target":"",
-              "remember_last_lang": false
+              "remember_last_lang": true
            },
            "Yandex.Translate":{
-              "default_source":"ru",
-              "default_target":"fr",
+              "default_source":"en",
+              "default_target":"ru",
               "last_source":"",
               "last_target":"",
               "remember_last_lang": true
-           }
+           },
         }
         '
         </default>

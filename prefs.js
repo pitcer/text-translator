@@ -584,18 +584,18 @@ const TextTranslatorPrefsWidget = new GObject.Class({
             };
             result_list.push(item);
         }
-
-        page.add_combo(
-            'Default translator:',
-            PrefsKeys.DEFAULT_TRANSLATOR_KEY,
-            result_list,
-            'string'
-        );
-
-        page.add_boolean(
-            'Remember the last used translator:',
-            PrefsKeys.REMEMBER_LAST_TRANSLATOR_KEY
-        );
+        //
+        // page.add_combo(
+        //     'Default translator:',
+        //     PrefsKeys.DEFAULT_TRANSLATOR_KEY,
+        //     result_list,
+        //     'string'
+        // );
+        //
+        // page.add_boolean(
+        //     'Remember the last used translator:',
+        //     PrefsKeys.REMEMBER_LAST_TRANSLATOR_KEY
+        // );
         page.add_boolean(
             'Show icon:',
             PrefsKeys.SHOW_ICON_KEY
@@ -682,7 +682,7 @@ const TextTranslatorPrefsWidget = new GObject.Class({
             'Open tranlator dialog';
         keybindings[PrefsKeys.TRANSLATE_FROM_CLIPBOARD_KEY] =
             'Translate from clipboard';
-        keybindings[PrefsKeys.TRANSLATE_FROM_SELECTION_KEY] = 
+        keybindings[PrefsKeys.TRANSLATE_FROM_SELECTION_KEY] =
             'Translate from primary selection';
 
         let page = new TranslatorKeybindingsWidget(keybindings);

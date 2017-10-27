@@ -1,6 +1,9 @@
 const Lang = imports.lang;
 const ExtensionUtils = imports.misc.extensionUtils;
 
+const GLib = imports.gi.GLib;
+const Gio = imports.gi.Gio;
+
 const Me = ExtensionUtils.getCurrentExtension();
 const PrefsKeys = Me.imports.prefs_keys;
 const Utils = Me.imports.utils;

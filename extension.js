@@ -1,3 +1,11 @@
+(function() {
+  // Teach typelib location path to gi.
+  const GIRepository = imports.gi.GIRepository;
+  ['mutter', 'gnome-shell', 'gnome-bluetooth', 'gnome-games', ].forEach(function(path) {
+    GIRepository.Repository.prepend_search_path('/usr/lib/' + path);
+  });
+})();
+
 const St = imports.gi.St;
 const Main = imports.ui.main;
 const Lang = imports.lang;
@@ -8,6 +16,10 @@ const Meta = imports.gi.Meta;
 const Mainloop = imports.mainloop;
 const PopupMenu = imports.ui.popupMenu;
 const PanelMenu = imports.ui.panelMenu;
+
+const GLib = imports.gi.GLib;
+const Gio = imports.gi.Gio;
+
 
 const Me = ExtensionUtils.getCurrentExtension();
 const Utils = Me.imports.utils;
@@ -820,11 +832,11 @@ const TranslatorExtension = new Lang.Class({
         this._translators_button = this._get_translators_button()
         this._dialog.topbar.add_button(this._translators_button);
 
-        let translate_label = new ButtonsBar.ButtonsBarLabel(
-            ' ',
-            'tranlator-top-bar-button'
-        );
-        this._dialog.topbar.add_button(translate_label);
+        // let translate_label = new ButtonsBar.ButtonsBarLabel(
+        //     ' ',
+        //     'tranlator-top-bar-button'
+        // );
+        // this._dialog.topbar.add_button(translate_label);
 
         this._translate_button = this._get_translate_button();
         this._dialog.topbar.add_button(this._translate_button);
@@ -871,7 +883,7 @@ const TranslatorExtension = new Lang.Class({
                     );
                 }
                 else {
-                    this._dialog.target.markup ='%s'.format(result);
+                    this._dialog.target.markup = result;
 
                     if(Utils.SETTINGS.get_boolean(PrefsKeys.ENABLE_AUTO_SPEAK_KEY)) {
                         this._dialog.google_tts.speak(

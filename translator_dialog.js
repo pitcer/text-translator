@@ -215,7 +215,7 @@ const EntryBase = new Lang.Class({
     },
 
     set max_length(length) {
-        length = parseInt(length, 10);
+        length = parseInt(length, 10) || 0;
         this._clutter_text.set_max_length(length);
         this.emit('max-length-changed');
     }

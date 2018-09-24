@@ -225,7 +225,7 @@ const LanguageChooser = new Lang.Class({
             return a > b;
         }));
 
-        for each(let code in keys) {
+        for (let code of keys) {
             let button = this._get_button(code, languages[code]);
 
             if(button.lang_code === selected_language_code) {

@@ -4,7 +4,12 @@ Translation of the text by different translators (currently [Google.Translate](h
 
 ### Installing translate-shell
 
-This extension needs the package translate-shell.
+This extension needs the package translate-shell.  
+Also, make sure you have the following dependencies installed:  
+`sudo apt install gir1.2-clutter-1.0 gir1.2-clutter-gst-3.0 gir1.2-gtkclutter-1.0`
+
+
+
 
 #### Install translate-shell
 ```

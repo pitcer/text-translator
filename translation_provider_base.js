@@ -104,7 +104,9 @@ const TranslationProviderPrefs = new Lang.Class({
         let json_string = Utils.SETTINGS.get_string(
             PrefsKeys.TRANSLATORS_PREFS_KEY
         );
-        let prefs = JSON.parse(json_string);
+        let prefs = {};
+        prefs[this._name] = {}
+        try { prefs = JSON.parse(json_string); } catch(e) {}
 
         if(prefs[this._name] === undefined) {
             throw new Error("Can't load prefs for %s".format(this._name));

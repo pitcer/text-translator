@@ -242,6 +242,7 @@ var ButtonsBar = class ButtonsBar {
         for (let button of this._buttons) {
             button.destroy();
         }
+        this._buttons = [];
     }
 
     destroy() {

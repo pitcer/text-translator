@@ -9,7 +9,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Soup = imports.gi.Soup;
 const Clutter = imports.gi.Clutter;
 
-const _httpSession = new Soup.SessionAsync();
+var _httpSession = new Soup.SessionAsync();
 Soup.Session.prototype.add_feature.call(
     _httpSession,
     new Soup.ProxyResolverDefault()
@@ -17,9 +17,9 @@ Soup.Session.prototype.add_feature.call(
 _httpSession.user_agent = 'Gnome-Shell TextTranslator Extension';
 _httpSession.timeout = 5;
 
-const SETTINGS = getSettings();
+var SETTINGS = getSettings();
 
-const ICONS = {
+var ICONS = {
     help: 'dialog-question-symbolic',
     preferences: 'preferences-system-symbolic',
     close: 'window-close-symbolic',

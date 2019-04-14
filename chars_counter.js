@@ -1,7 +1,7 @@
 const St = imports.gi.St;
 const Tweener = imports.ui.tweener;
 
-const CharsCounter = class CharsCounter {
+var CharsCounter = class CharsCounter {
 
     constructor() {
         this.actor = new St.BoxLayout({

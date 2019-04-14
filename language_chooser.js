@@ -11,7 +11,7 @@ const PrefsKeys = Me.imports.prefs_keys;
 
 const COLUMNS = 4;
 
-const LanguageChooser = class LanguageChooser extends ModalDialog.ModalDialog {
+var LanguageChooser = class LanguageChooser extends ModalDialog.ModalDialog {
 
     constructor(title, languages) {
         super({destroyOnClose: false});

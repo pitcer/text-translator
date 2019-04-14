@@ -5,7 +5,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const ButtonsBar = Me.imports.buttons_bar;
 
-const LanguagesButtons = class LanguagesButtons {
+var LanguagesButtons = class LanguagesButtons {
 
     constructor(languages) {
         this._langs = languages || [];

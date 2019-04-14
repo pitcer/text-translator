@@ -3,7 +3,7 @@ const Gst = imports.gi.Gst;
 const URI = 'https://translate.google.com/translate_tts?client=tw-ob&ie=UTF-8&total=1&idx=0&textlen=%d&q=%s&tl=%s';
 const MAX_LEN = 100;
 
-const GoogleTTS = class GoogleTTS {
+var GoogleTTS = class GoogleTTS {
 
     constructor() {
         Gst.init(null, 0);

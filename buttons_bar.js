@@ -6,7 +6,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Utils = Me.imports.utils;
 
-const ButtonsBarButton = class ButtonsBarButton {
+var ButtonsBarButton = class ButtonsBarButton {
 
     constructor(icon_name, label_text, tip_text, params, action) {
         this.params = Params.parse(params, {
@@ -192,7 +192,7 @@ const ButtonsBarButton = class ButtonsBarButton {
     }
 }
 
-const ButtonsBarLabel = class ButtonsBarLabel {
+var ButtonsBarLabel = class ButtonsBarLabel {
 
     constructor(text, style_class) {
         this._label = new St.Label({
@@ -217,7 +217,7 @@ const ButtonsBarLabel = class ButtonsBarLabel {
     }
 }
 
-const ButtonsBar = class ButtonsBar {
+var ButtonsBar = class ButtonsBar {
 
     constructor(params) {
         this.params = Params.parse(params, {

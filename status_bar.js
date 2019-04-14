@@ -9,7 +9,7 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Utils = Me.imports.utils;
 
-const MESSAGE_TYPES = {
+var MESSAGE_TYPES = {
     error: 0,
     info: 1,
     success: 2
@@ -72,7 +72,7 @@ const StatusBarMessage = class StatusBarMessage {
     }
 }
 
-const StatusBar = class StatusBar {
+var StatusBar = class StatusBar {
 
     constructor(params) {
         this.actor = new St.BoxLayout({

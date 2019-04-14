@@ -63,7 +63,7 @@ const INSTANT_TRANSLATION_DELAY = 1000; // ms
 const TranslatorPanelButton = class extends PanelMenu.Button {
 
     constructor(translator) {
-        this.parent(0.0, 'text-translator');
+        super(0.0, 'text-translator');
         this.actor.reactive = false;
 
         this._translator = translator;
@@ -201,10 +201,10 @@ const TranslatorPanelButton = class extends PanelMenu.Button {
 const TranslatorsPopup = class extends PopupMenu.PopupMenu {
 
     constructor(button, dialog) {
+        super(button.actor, 0, St.Side.TOP);
         this._button = button;
         this._dialog = dialog;
 
-        this.parent(this._button.actor, 0, St.Side.TOP);
         this.setSourceAlignment(0.05);
 
         this._label_menu_item = new St.Label({

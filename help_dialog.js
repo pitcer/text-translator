@@ -11,9 +11,9 @@ const PrefsKeys = Me.imports.prefs_keys;
 const HelpDialog = class extends ModalDialog.ModalDialog {
 
     constructor() {
-        this.parent();
+        super();
 
-        this._dialogLayout = 
+        this._dialogLayout =
             typeof this.dialogLayout === "undefined"
             ? this._dialogLayout
             : this.dialogLayout;
@@ -104,6 +104,6 @@ const HelpDialog = class extends ModalDialog.ModalDialog {
 
     open() {
         this._resize()
-        this.parent()
+        super.open()
     }
 }

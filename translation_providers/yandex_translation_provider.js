@@ -6,7 +6,7 @@ const ENGINE = 'Yandex'
 const Translator = class extends TranslationProviderBase.TranslationProviderBase {
 
     constructor() {
+        super(ENGINE + '.Translate');
         this.engine = ENGINE
-        this.parent(ENGINE+'.Translate');
     }
 }

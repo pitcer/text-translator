@@ -17,7 +17,7 @@ const TranslatorProvidersWidget = GObject.registerClass(
     class TranslatorProvidersWidget extends Gtk.Grid {
 
     _init() {
-        this.parent();
+        super._init();
         this.set_orientation(Gtk.Orientation.VERTICAL);
         this.margin = this.row_spacing = this.column_spacing = 10;
 
@@ -235,7 +235,7 @@ const TranslatorKeybindingsWidget = GObject.registerClass(
     class TranslatorKeybindingsWidget extends Gtk.Box {
 
     _init(keybindings) {
-        this.parent();
+        super._init();
         this.set_orientation(Gtk.Orientation.VERTICAL);
 
         this._keybindings = keybindings;
@@ -355,7 +355,7 @@ const TranslatorPrefsGrid = GObject.registerClass(
     class TranslatorPrefsGrid extends Gtk.Grid {
 
     _init(params) {
-        this.parent(params);
+        super._init(params);
         this._settings = Utils.SETTINGS;
         this.margin = this.row_spacing = this.column_spacing = 10;
         this._rownum = 0;
@@ -530,7 +530,7 @@ const TextTranslatorPrefsWidget = GObject.registerClass(
     class TextTranslatorPrefsWidget extends Gtk.Box {
 
     _init(params) {
-        this.parent(params);
+        super._init(params);
         this.set_orientation(Gtk.Orientation.VERTICAL);
         this._settings = Utils.SETTINGS;
 

@@ -14,9 +14,9 @@ const COLUMNS = 4;
 const LanguageChooser = class extends ModalDialog.ModalDialog {
 
     constructor(title, languages) {
-        this.parent({destroyOnClose: false});
+        super({destroyOnClose: false});
 
-        this._dialogLayout = 
+        this._dialogLayout =
             typeof this.dialogLayout === "undefined"
             ? this._dialogLayout
             : this.dialogLayout;
@@ -251,12 +251,12 @@ const LanguageChooser = class extends ModalDialog.ModalDialog {
         this._languages_table.destroy_all_children();
         this._search_entry.set_text('');
         this._search_entry.hide();
-        this.parent();
+        super.close();
     }
 
     open() {
         this._resize()
-        this.parent()
+        super.open()
     }
 }
 Signals.addSignalMethods(LanguageChooser.prototype);

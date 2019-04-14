@@ -223,7 +223,7 @@ Signals.addSignalMethods(EntryBase.prototype);
 const SourceEntry = class extends EntryBase {
 
     constructor() {
-        this.parent({
+        super({
             entry_style: 'translator-entry',
             box_style: 'translator-source-text-box'
         })
@@ -238,7 +238,7 @@ const SourceEntry = class extends EntryBase {
 const TargetEntry = class extends EntryBase {
 
     constructor() {
-        this.parent({
+        super({
             box_style: 'translator-target-text-box',
             entry_style: 'translator-entry'
         });
@@ -283,7 +283,7 @@ const ListenButton = class {
 const TranslatorDialog = class extends ModalDialog.ModalDialog {
 
     constructor(text_translator) {
-        this.parent({
+        super({
             shellReactive: false,
             destroyOnClose: false
         });
@@ -558,7 +558,7 @@ const TranslatorDialog = class extends ModalDialog.ModalDialog {
 
     close() {
         this._statusbar.clear();
-        this.parent();
+        super.close();
     }
 
     destroy() {
@@ -580,7 +580,7 @@ const TranslatorDialog = class extends ModalDialog.ModalDialog {
         this._listen_source_button.destroy();
         this._listen_target_button.destroy();
         this._google_tts.destroy();
-        this.parent();
+        super.destroy();
     }
 
     get source() {

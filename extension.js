@@ -917,7 +917,6 @@ const TranslatorExtension = class TranslatorExtension {
             Utils.SETTINGS,
             Meta.KeyBindingFlags.NONE,
             Shell.ActionMode.NORMAL |
-            Shell.ActionMode.MESSAGE_TRAY |
             Shell.ActionMode.OVERVIEW,
             () => {
                 this.open();
@@ -929,7 +928,6 @@ const TranslatorExtension = class TranslatorExtension {
             Utils.SETTINGS,
             Meta.KeyBindingFlags.NONE,
             Shell.ActionMode.NORMAL |
-            Shell.ActionMode.MESSAGE_TRAY |
             Shell.ActionMode.OVERVIEW,
             () => {
                 this._translate_from_clipboard(St.ClipboardType.CLIPBOARD);
@@ -941,7 +939,6 @@ const TranslatorExtension = class TranslatorExtension {
             Utils.SETTINGS,
             Meta.KeyBindingFlags.NONE,
             Shell.ActionMode.NORMAL |
-            Shell.ActionMode.MESSAGE_TRAY |
             Shell.ActionMode.OVERVIEW,
             () => {
                 this._translate_from_clipboard(St.ClipboardType.PRIMARY);

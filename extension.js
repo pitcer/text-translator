@@ -266,6 +266,8 @@ const TranslatorsPopup = class TranslatorsPopup extends PopupMenu.PopupMenu {
 const TranslatorExtension = class TranslatorExtension {
 
     constructor() {
+        this._current_source_lang = "en"
+        this._current_target_lang = "ru"
         this._dialog = new TranslatorDialog.TranslatorDialog(this);
         this._dialog.source.clutter_text.connect('text-changed',
             () => {

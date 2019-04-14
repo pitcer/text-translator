@@ -89,11 +89,11 @@ const TranslationProviderPrefs = class TranslationProviderPrefs {
             () => { this._load_prefs(); }
         );
 
-        this._last_source;
-        this._last_target;
-        this._default_source;
-        this._default_target;
-        this._remember_last_lang;
+        this._last_source = "";
+        this._last_target = "";
+        this._default_source = "en";
+        this._default_target = "ru";
+        this._remember_last_lang = false;
 
         this._load_prefs();
     }

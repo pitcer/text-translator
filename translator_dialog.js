@@ -21,7 +21,7 @@ const GoogleTTS = Me.imports.google_tts;
 const EntryBase = new Lang.Class({
     Name: 'EntryBase',
 
-    _init: function(params) {
+    _init(params) {
         this.params = Params.parse(params, {
             box_style: 'translator-text-box',
             entry_style: 'translator-entry'
@@ -83,7 +83,7 @@ const EntryBase = new Lang.Class({
         this.scroll.add_actor(this._box);
     },
 
-    _on_key_press_event: function(o, e) {
+    _on_key_press_event(o, e) {
         let symbol = e.get_key_symbol();
         let code = e.get_key_code();
         let state = e.get_state();
@@ -160,7 +160,7 @@ const EntryBase = new Lang.Class({
         return false;
     },
 
-    destroy: function() {
+    destroy() {
         if(this._font_connection_id > 0) {
             Utils.SETTINGS.disconnect(this._font_connection_id);
         }
@@ -168,16 +168,16 @@ const EntryBase = new Lang.Class({
         this.actor.destroy();
     },
 
-    grab_key_focus: function() {
+    grab_key_focus() {
         this._clutter_text.grab_key_focus();
     },
 
-    set_size: function(width, height) {
+    set_size(width, height) {
         this.scroll.set_width(width);
         this.scroll.set_height(height);
     },
 
-    set_font_size: function(size) {
+    set_font_size(size) {
         let style_string = "font-size: %spx".format(size);
         this.entry.set_style(style_string);
     },
@@ -226,7 +226,7 @@ const SourceEntry = new Lang.Class({
     Name: 'SourceEntry',
     Extends: EntryBase,
 
-    _init: function() {
+    _init() {
         this.parent({
             entry_style: 'translator-entry',
             box_style: 'translator-source-text-box'
@@ -243,7 +243,7 @@ const TargetEntry = new Lang.Class({
     Name: 'TargetEntry',
     Extends: EntryBase,
 
-    _init: function() {
+    _init() {
         this.parent({
             box_style: 'translator-target-text-box',
             entry_style: 'translator-entry'
@@ -256,7 +256,7 @@ const TargetEntry = new Lang.Class({
 const ListenButton = new Lang.Class({
     Name: 'ListenButton',
 
-    _init: function() {
+    _init() {
         this.actor = new St.Button({
             style_class: 'listen-button',
             x_expand: false,
@@ -274,15 +274,15 @@ const ListenButton = new Lang.Class({
         this.actor.add_actor(this._icon);
     },
 
-    show: function() {
+    show() {
         this.actor.show();
     },
 
-    hide: function() {
+    hide() {
         this.actor.hide();
     },
 
-    destroy: function() {
+    destroy() {
         this.actor.destroy();
     }
 });
@@ -291,7 +291,7 @@ const TranslatorDialog = new Lang.Class({
     Name: 'TranslatorDialog',
     Extends: ModalDialog.ModalDialog,
 
-    _init: function(text_translator) {
+    _init(text_translator) {
         this.parent({
             shellReactive: false,
             destroyOnClose: false
@@ -390,19 +390,19 @@ const TranslatorDialog = new Lang.Class({
         this._init_scroll_sync();
     },
 
-    _on_source_changed: function() {
+    _on_source_changed() {
         this._chars_counter.current_length = this._source.length;
 
         if(!this._source.is_empty) this._listen_source_button.show();
         else this._listen_source_button.hide();
     },
 
-    _on_target_changed: function() {
+    _on_target_changed() {
         if(!this._target.is_empty) this._listen_target_button.show();
         else this._listen_target_button.hide();
     },
 
-    _init_scroll_sync: function() {
+    _init_scroll_sync() {
         if(Utils.SETTINGS.get_boolean(PrefsKeys.SYNC_ENTRIES_SCROLL_KEY)) {
             this.sync_entries_scroll();
         }
@@ -419,7 +419,7 @@ const TranslatorDialog = new Lang.Class({
         );
     },
 
-    _init_most_used_bar: function() {
+    _init_most_used_bar() {
         if(Utils.SETTINGS.get_boolean(PrefsKeys.SHOW_MOST_USED_KEY)) {
             this._show_most_used_bar();
         }
@@ -436,7 +436,7 @@ const TranslatorDialog = new Lang.Class({
         );
     },
 
-    _show_most_used_bar: function() {
+    _show_most_used_bar() {
         if(!this._most_used_bar) {
             this._most_used_sources = new LanguagesButtons.LanguagesButtons();
             this._most_used_targets = new LanguagesButtons.LanguagesButtons();
@@ -448,7 +448,7 @@ const TranslatorDialog = new Lang.Class({
         this._grid_layout.attach(this._most_used_targets.actor, 1, 1, 1, 1);
     },
 
-    _hide_most_used_bar: function() {
+    _hide_most_used_bar() {
         if(this._most_used_bar) {
             this._topbar.actor.set_style("padding-bottom: 10px;");
             this._most_used_sources.destroy();
@@ -457,14 +457,14 @@ const TranslatorDialog = new Lang.Class({
         }
     },
 
-    _get_statusbar_height: function() {
+    _get_statusbar_height() {
         let message_id = this._statusbar.add_message('Sample message 1.');
         let result = this._statusbar.actor.get_preferred_height(-1)[1];
         this._statusbar.remove_message(message_id);
         return result;
     },
 
-    _resize: function() {
+    _resize() {
         let width_percents = Utils.SETTINGS.get_int(
             PrefsKeys.WIDTH_PERCENTS_KEY
         );
@@ -507,7 +507,7 @@ const TranslatorDialog = new Lang.Class({
         this._target.set_size(text_box_width, text_box_height - 100)
     },
 
-    sync_entries_scroll: function() {
+    sync_entries_scroll() {
         if(this._connection_ids.source_scroll < 1) {
             let source_v_adjust = this._source.scroll.vscroll.adjustment;
             this._connection_ids.source_scroll = source_v_adjust.connect(
@@ -546,7 +546,7 @@ const TranslatorDialog = new Lang.Class({
         }
     },
 
-    unsync_entries_scroll: function() {
+    unsync_entries_scroll() {
         if(this._connection_ids.source_scroll > 0) {
             let source_v_adjust = this._source.scroll.vscroll.adjustment;
             source_v_adjust.disconnect(this._connection_ids.source_scroll);
@@ -560,17 +560,17 @@ const TranslatorDialog = new Lang.Class({
         }
     },
 
-    open: function() {
+    open() {
         this.parent();
         this._resize();
     },
 
-    close: function() {
+    close() {
         this._statusbar.clear();
         this.parent();
     },
 
-    destroy: function() {
+    destroy() {
         if(this._connection_ids.sync_scroll_settings > 0) {
             Utils.SETTINGS.disconnect(this._connection_ids.sync_scroll_settings);
         }

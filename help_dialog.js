@@ -13,7 +13,7 @@ const HelpDialog = new Lang.Class({
     Name: 'HelpDialog',
     Extends: ModalDialog.ModalDialog,
 
-    _init: function() {
+    _init() {
         this.parent();
 
         this._dialogLayout = 
@@ -60,7 +60,7 @@ const HelpDialog = new Lang.Class({
         });
     },
 
-    _on_key_press_event: function(object, event) {
+    _on_key_press_event(object, event) {
         let symbol = event.get_key_symbol();
 
         if(symbol == Clutter.Escape) {
@@ -68,7 +68,7 @@ const HelpDialog = new Lang.Class({
         }
     },
 
-    _get_close_button: function() {
+    _get_close_button() {
         let icon = new St.Icon({
             icon_name: Utils.ICONS.close,
             icon_size: 20,
@@ -86,7 +86,7 @@ const HelpDialog = new Lang.Class({
         return button;
     },
 
-    _resize: function() {
+    _resize() {
         let width_percents = Utils.SETTINGS.get_int(PrefsKeys.WIDTH_PERCENTS_KEY);
         let height_percents = Utils.SETTINGS.get_int(PrefsKeys.HEIGHT_PERCENTS_KEY);
         let primary = Main.layoutManager.primaryMonitor;
@@ -100,12 +100,12 @@ const HelpDialog = new Lang.Class({
         this._dialogLayout.set_height(help_height);
     },
 
-    close: function() {
+    close() {
         this.parent();
         this.destroy();
     },
 
-    open: function() {
+    open() {
         this._resize()
         this.parent()
     },

@@ -7,7 +7,7 @@ const MAX_LEN = 100;
 const GoogleTTS = new Lang.Class({
     Name: 'GoogleTTS',
 
-    _init: function() {
+    _init() {
         Gst.init(null, 0);
 
         this._player = Gst.ElementFactory.make("playbin", "player");
@@ -18,11 +18,11 @@ const GoogleTTS = new Lang.Class({
         this._bus.connect("message::eos", Lang.bind(this, this._kill_stream));
     },
 
-    _kill_stream: function() {
+    _kill_stream() {
         this._player.set_state(Gst.State.NULL);
     },
 
-    speak: function(text, lang) {
+    speak(text, lang) {
         let extract = text.substr(0, MAX_LEN - 1);
         this._kill_stream();
 
@@ -31,7 +31,7 @@ const GoogleTTS = new Lang.Class({
         this._player.set_state(Gst.State.PLAYING);
     },
 
-    destroy: function() {
+    destroy() {
         this._player.set_state(Gst.State.NULL);
     },
 });

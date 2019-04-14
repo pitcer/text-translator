@@ -5,7 +5,7 @@ const Tweener = imports.ui.tweener;
 const CharsCounter = new Lang.Class({
     Name: 'CharsCounter',
 
-    _init: function() {
+    _init() {
         this.actor = new St.BoxLayout({
             style_class: 'translator-chars-counter-box',
             visible: false
@@ -34,7 +34,7 @@ const CharsCounter = new Lang.Class({
         this.actor.add_actor(this._max_length_label);
     },
 
-    _show: function() {
+    _show() {
         if(this.actor.visible) return;
 
         this.actor.opacity = 0;
@@ -47,7 +47,7 @@ const CharsCounter = new Lang.Class({
         });
     },
 
-    _hide: function() {
+    _hide() {
         if(!this.actor.visible) return;
 
         Tweener.addTween(this.actor, {
@@ -61,7 +61,7 @@ const CharsCounter = new Lang.Class({
         });
     },
 
-    _maybe_show: function() {
+    _maybe_show() {
         if(this._max_length < 1 || this._current_length < 1) {
             this._hide();
             return;
@@ -72,7 +72,7 @@ const CharsCounter = new Lang.Class({
         this._show();
     },
 
-    _current_length_changed: function() {
+    _current_length_changed() {
         this._maybe_show();
 
         let markup;
@@ -106,7 +106,7 @@ const CharsCounter = new Lang.Class({
         clutter_text.set_markup(markup);
     },
 
-    _max_length_changed: function() {
+    _max_length_changed() {
         this._maybe_show();
         let markup = '<b>%s</b>'.format(this._max_length.toString());
         let clutter_text = this._max_length_label.get_clutter_text();
@@ -130,7 +130,7 @@ const CharsCounter = new Lang.Class({
         this._current_length_changed();
     },
 
-    destroy: function() {
+    destroy() {
         this.actor.destroy();
     },
 

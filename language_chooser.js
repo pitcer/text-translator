@@ -16,7 +16,7 @@ const LanguageChooser = new Lang.Class({
     Name: 'LanguageChooser',
     Extends: ModalDialog.ModalDialog,
 
-    _init: function(title, languages) {
+    _init(title, languages) {
         this.parent({destroyOnClose: false});
 
         this._dialogLayout = 
@@ -103,7 +103,7 @@ const LanguageChooser = new Lang.Class({
         this.contentLayout.add_actor(this._table);
     },
 
-    _on_key_press_event: function(object, event) {
+    _on_key_press_event(object, event) {
         let symbol = event.get_key_symbol();
 
         if(symbol == Clutter.Escape) {
@@ -122,7 +122,7 @@ const LanguageChooser = new Lang.Class({
         }
     },
 
-    _update_list: function() {
+    _update_list() {
         this._languages_table.destroy_all_children();
         let filtered = {};
 
@@ -139,7 +139,7 @@ const LanguageChooser = new Lang.Class({
         this.show_languages('', filtered);
     },
 
-    _get_close_button: function() {
+    _get_close_button() {
         let icon = new St.Icon({
             icon_name: Utils.ICONS.close,
             icon_size: 20,
@@ -163,7 +163,7 @@ const LanguageChooser = new Lang.Class({
         return button;
     },
 
-    _get_button: function(lang_code, lang_name) {
+    _get_button(lang_code, lang_name) {
         let button = new St.Button({
             label: '%s'.format(lang_name),
             track_hover: true,
@@ -186,7 +186,7 @@ const LanguageChooser = new Lang.Class({
         return button;
     },
 
-    _resize: function() {
+    _resize() {
         let width_percents = Utils.SETTINGS.get_int(PrefsKeys.WIDTH_PERCENTS_KEY);
         let height_percents = Utils.SETTINGS.get_int(PrefsKeys.HEIGHT_PERCENTS_KEY);
         let primary = Main.layoutManager.primaryMonitor;
@@ -210,7 +210,7 @@ const LanguageChooser = new Lang.Class({
         this._scroll.set_height(scroll_height);
     },
 
-    show_languages: function(selected_language_code, list) {
+    show_languages(selected_language_code, list) {
         let row = 0;
         let column = 0;
         let languages = this._languages;
@@ -245,19 +245,19 @@ const LanguageChooser = new Lang.Class({
         }
     },
 
-    set_languages: function(languages) {
+    set_languages(languages) {
         if(!languages) return;
         this._languages = languages;
     },
 
-    close: function() {
+    close() {
         this._languages_table.destroy_all_children();
         this._search_entry.set_text('');
         this._search_entry.hide();
         this.parent();
     },
 
-    open: function() {
+    open() {
         this._resize()
         this.parent()
     },

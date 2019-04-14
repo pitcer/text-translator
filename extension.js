@@ -65,7 +65,7 @@ const TranslatorPanelButton = new Lang.Class({
     Name: 'TranslatorPanelButton',
     Extends: PanelMenu.Button,
 
-    _init: function(translator) {
+    _init(translator) {
         this.parent(0.0, 'text-translator');
         this.actor.reactive = false;
 
@@ -84,7 +84,7 @@ const TranslatorPanelButton = new Lang.Class({
         this.actor.add_actor(this._icon);
     },
 
-    _add_menu_items: function() {
+    _add_menu_items() {
         let menu_item;
 
         this._item_open = new PopupMenu.PopupMenuItem('Open');
@@ -117,7 +117,7 @@ const TranslatorPanelButton = new Lang.Class({
         this.menu.addMenuItem(this._menu_open_prefs);
     },
 
-    _on_button_press: function(o, e) {
+    _on_button_press(o, e) {
         let button = e.get_button();
 
         switch(button) {
@@ -133,7 +133,7 @@ const TranslatorPanelButton = new Lang.Class({
         }
     },
 
-    set_focus: function(focus) {
+    set_focus(focus) {
         if(focus) {
             this.actor.add_style_pseudo_class('active');
         }
@@ -142,7 +142,7 @@ const TranslatorPanelButton = new Lang.Class({
         }
     },
 
-    toggle_menu: function() {
+    toggle_menu() {
         if(!this.menu.isOpen) {
             let clipboard = St.Clipboard.get_default();
 
@@ -205,7 +205,7 @@ const TranslatorsPopup = new Lang.Class({
     Name: 'TranslatorsPopup',
     Extends: PopupMenu.PopupMenu,
 
-    _init: function(button, dialog) {
+    _init(button, dialog) {
         this._button = button;
         this._dialog = dialog;
 
@@ -232,7 +232,7 @@ const TranslatorsPopup = new Lang.Class({
         );
     },
 
-    add_item: function(name, action) {
+    add_item(name, action) {
         let item = new PopupMenu.PopupMenuItem(name);
         item.connect('activate', Lang.bind(this, function() {
             action();
@@ -241,7 +241,7 @@ const TranslatorsPopup = new Lang.Class({
         this.addMenuItem(item);
     },
 
-    open: function() {
+    open() {
         this._button.set_sensitive(false);
         this._button.actor.add_style_pseudo_class('active');
         this.box.add(this._label_menu_item);
@@ -249,7 +249,7 @@ const TranslatorsPopup = new Lang.Class({
         this.firstMenuItem.actor.grab_key_focus();
     },
 
-    close: function() {
+    close() {
         this.parent(true);
         this._button.set_sensitive(true);
         this._button.actor.remove_style_pseudo_class('active');
@@ -257,7 +257,7 @@ const TranslatorsPopup = new Lang.Class({
         this.destroy();
     },
 
-    destroy: function() {
+    destroy() {
         this.removeAll();
         this.actor.destroy();
 
@@ -271,7 +271,7 @@ const TranslatorsPopup = new Lang.Class({
 const TranslatorExtension = new Lang.Class({
     Name: 'TranslatorExtension',
 
-    _init: function() {
+    _init() {
         this._dialog = new TranslatorDialog.TranslatorDialog(this);
         this._dialog.source.clutter_text.connect('text-changed',
             Lang.bind(this, function() {
@@ -318,7 +318,7 @@ const TranslatorExtension = new Lang.Class({
         );
     },
 
-    _init_most_used: function() {
+    _init_most_used() {
         if(!Utils.SETTINGS.get_boolean(PrefsKeys.SHOW_MOST_USED_KEY)) return;
 
         this._languages_stats.connect(
@@ -343,7 +343,7 @@ const TranslatorExtension = new Lang.Class({
         );
     },
 
-    _show_most_used: function() {
+    _show_most_used() {
         if(!Utils.SETTINGS.get_boolean(PrefsKeys.SHOW_MOST_USED_KEY)) return;
 
         let most_used_sources = this._languages_stats.get_n_most_used(
@@ -363,14 +363,14 @@ const TranslatorExtension = new Lang.Class({
         this._most_used_bar_select_current();
     },
 
-    _most_used_bar_select_current: function() {
+    _most_used_bar_select_current() {
         if(!Utils.SETTINGS.get_boolean(PrefsKeys.SHOW_MOST_USED_KEY)) return;
 
         this._dialog.most_used.sources.select(this._current_source_lang);
         this._dialog.most_used.targets.select(this._current_target_lang);
     },
 
-    _init_languages_chooser: function() {
+    _init_languages_chooser() {
         this._source_language_chooser = new LanguageChooser.LanguageChooser(
             'Choose source language:'
         );
@@ -386,7 +386,7 @@ const TranslatorExtension = new Lang.Class({
         ));
     },
 
-    _remove_timeouts: function(timeout_key) {
+    _remove_timeouts(timeout_key) {
         if(!Utils.is_blank(timeout_key)) {
             if(TIMEOUT_IDS[timeout_key] > 0) {
                 Mainloop.source_remove(TIMEOUT_IDS[timeout_key]);
@@ -401,7 +401,7 @@ const TranslatorExtension = new Lang.Class({
         }
     },
 
-    _on_key_press_event: function(object, event) {
+    _on_key_press_event(object, event) {
         let state = event.get_state();
         let symbol = event.get_key_symbol();
         let code = event.get_key_code();
@@ -469,7 +469,7 @@ const TranslatorExtension = new Lang.Class({
         }
     },
 
-    _set_current_translator: function(name) {
+    _set_current_translator(name) {
         this._translators_button.label = '<i>%s</i>'.format(name);
 
         this._translators_manager.current = name;
@@ -481,17 +481,17 @@ const TranslatorExtension = new Lang.Class({
         this._dialog.source.grab_key_focus();
     },
 
-    _set_current_source: function(lang_code) {
+    _set_current_source(lang_code) {
         this._current_source_lang = lang_code;
         this._translators_manager.current.prefs.last_source = lang_code;
     },
 
-    _set_current_target: function(lang_code) {
+    _set_current_target(lang_code) {
         this._current_target_lang = lang_code;
         this._translators_manager.current.prefs.last_target = lang_code;
     },
 
-    _set_current_languages: function() {
+    _set_current_languages() {
         let current_translator = this._translators_manager.current;
         let current_source = current_translator.prefs.default_source;
         let current_target = current_translator.prefs.default_target;
@@ -512,7 +512,7 @@ const TranslatorExtension = new Lang.Class({
         this._current_langs_changed();
     },
 
-    _swap_languages: function() {
+    _swap_languages() {
         let current = this._translators_manager.current;
         let source = this._current_source_lang;
         let target = this._current_target_lang;
@@ -523,7 +523,7 @@ const TranslatorExtension = new Lang.Class({
         this._translate();
     },
 
-    _reset_languages: function() {
+    _reset_languages() {
         let current = this._translators_manager.current;
         this._set_current_source(current.prefs.default_source);
         this._set_current_target(current.prefs.default_target);
@@ -531,7 +531,7 @@ const TranslatorExtension = new Lang.Class({
         this._most_used_bar_select_current();
     },
 
-    _update_stats: function() {
+    _update_stats() {
         let source_data = {
             code: this._current_source_lang,
             name: this._translators_manager.current.get_language_name(
@@ -556,12 +556,12 @@ const TranslatorExtension = new Lang.Class({
         );
     },
 
-    _show_help: function() {
+    _show_help() {
         let help_dialog = new Me.imports.help_dialog.HelpDialog;
         help_dialog.open();
     },
 
-    _on_source_language_chose: function(object, language) {
+    _on_source_language_chose(object, language) {
         this._most_used_bar_select_current();
         this._set_current_source(language.code);
         this._current_langs_changed();
@@ -569,7 +569,7 @@ const TranslatorExtension = new Lang.Class({
         this._translate();
     },
 
-    _on_target_language_chose: function(object, language) {
+    _on_target_language_chose(object, language) {
         this._most_used_bar_select_current();
         this._set_current_target(language.code);
         this._current_langs_changed();
@@ -577,7 +577,7 @@ const TranslatorExtension = new Lang.Class({
         this._translate();
     },
 
-    _current_langs_changed: function() {
+    _current_langs_changed() {
         this._source_lang_button.label =
             'from <i>%s</i>'.format(
                 this._translators_manager.current.get_language_name(
@@ -592,7 +592,7 @@ const TranslatorExtension = new Lang.Class({
             );
     },
 
-    _get_source_lang_button: function() {
+    _get_source_lang_button() {
         let button_params = {
             button_style_class: 'tranlator-top-bar-button-reactive',
             statusbar: this._dialog.statusbar
@@ -620,7 +620,7 @@ const TranslatorExtension = new Lang.Class({
         return button;
     },
 
-    _get_target_lang_button: function() {
+    _get_target_lang_button() {
         let button_params = {
             button_style_class: 'tranlator-top-bar-button-reactive',
             statusbar: this._dialog.statusbar
@@ -650,7 +650,7 @@ const TranslatorExtension = new Lang.Class({
         return button;
     },
 
-    _get_swap_langs_button: function() {
+    _get_swap_langs_button() {
         let button_params = {
             button_style_class: 'tranlator-top-bar-button-reactive',
             statusbar: this._dialog.statusbar
@@ -666,7 +666,7 @@ const TranslatorExtension = new Lang.Class({
         return button;
     },
 
-    _get_translators_button: function() {
+    _get_translators_button() {
         let button;
 
         if(this._translators_manager.num_translators < 2) {
@@ -713,7 +713,7 @@ const TranslatorExtension = new Lang.Class({
         return button;
     },
 
-    _get_translate_button: function() {
+    _get_translate_button() {
         let button_params = {
             button_style_class: 'tranlator-top-bar-go-button',
             statusbar: this._dialog.statusbar
@@ -729,7 +729,7 @@ const TranslatorExtension = new Lang.Class({
         return button;
     },
 
-    _get_instant_translation_button: function() {
+    _get_instant_translation_button() {
         let button_params = {
             button_style_class: 'translator-dialog-menu-toggle-button',
             toggle_mode: true,
@@ -759,7 +759,7 @@ const TranslatorExtension = new Lang.Class({
         return button;
     },
 
-    _get_help_button: function() {
+    _get_help_button() {
         let button_params = {
             button_style_class: 'translator-dialog-menu-button',
             statusbar: this._dialog.statusbar
@@ -775,7 +775,7 @@ const TranslatorExtension = new Lang.Class({
         return button;
     },
 
-    _get_prefs_button: function() {
+    _get_prefs_button() {
         let button_params = {
             button_style_class: 'translator-dialog-menu-button',
             statusbar: this._dialog.statusbar
@@ -794,7 +794,7 @@ const TranslatorExtension = new Lang.Class({
         return button;
     },
 
-    _get_close_button: function() {
+    _get_close_button() {
         let button_params = {
             button_style_class: 'translator-dialog-menu-button',
             statusbar: this._dialog.statusbar
@@ -812,7 +812,7 @@ const TranslatorExtension = new Lang.Class({
         return button;
     },
 
-    _add_topbar_buttons: function() {
+    _add_topbar_buttons() {
 
         this._source_lang_button = this._get_source_lang_button();
         this._dialog.topbar.add_button(this._source_lang_button);
@@ -842,7 +842,7 @@ const TranslatorExtension = new Lang.Class({
         this._dialog.topbar.add_button(this._translate_button);
     },
 
-    _add_dialog_menu_buttons: function() {
+    _add_dialog_menu_buttons() {
         let instant_translation_button = this._get_instant_translation_button();
         this._dialog.dialog_menu.add_button(instant_translation_button);
 
@@ -856,7 +856,7 @@ const TranslatorExtension = new Lang.Class({
         this._dialog.dialog_menu.add_button(close_button);
     },
 
-    _translate: function() {
+    _translate() {
         if(Utils.is_blank(this._dialog.source.text)) return;
 
         this._update_stats();
@@ -896,7 +896,7 @@ const TranslatorExtension = new Lang.Class({
         );
     },
 
-    _translate_from_clipboard: function(clipboard_type) {
+    _translate_from_clipboard(clipboard_type) {
         this.open();
 
         let clipboard = St.Clipboard.get_default();
@@ -917,7 +917,7 @@ const TranslatorExtension = new Lang.Class({
         }));
     },
 
-    _add_keybindings: function() {
+    _add_keybindings() {
         Main.wm.addKeybinding(
             PrefsKeys.OPEN_TRANSLATOR_KEY,
             Utils.SETTINGS,
@@ -955,27 +955,27 @@ const TranslatorExtension = new Lang.Class({
         );
     },
 
-    _remove_keybindings: function() {
+    _remove_keybindings() {
         Main.wm.removeKeybinding(PrefsKeys.OPEN_TRANSLATOR_KEY);
         Main.wm.removeKeybinding(PrefsKeys.TRANSLATE_FROM_CLIPBOARD_KEY)
         Main.wm.removeKeybinding(PrefsKeys.TRANSLATE_FROM_SELECTION_KEY);
     },
 
-    _add_panel_button: function() {
+    _add_panel_button() {
         if(!this._panel_button) {
             this._panel_button = new TranslatorPanelButton(this);
             Main.panel.addToStatusArea('text-translator', this._panel_button);
         }
     },
 
-    _remove_panel_button: function() {
+    _remove_panel_button() {
         if(this._panel_button != false) {
             this._panel_button.destroy();
             this._panel_button = false;
         }
     },
 
-    open: function() {
+    open() {
         if(Utils.SETTINGS.get_boolean(PrefsKeys.REMEMBER_LAST_TRANSLATOR_KEY)) {
             let translator =
                 this._translators_manager.last_used
@@ -1002,7 +1002,7 @@ const TranslatorExtension = new Lang.Class({
         }
     },
 
-    close: function() {
+    close() {
         if(this._panel_button) {
             this._panel_button.set_focus(false);
         }
@@ -1010,7 +1010,7 @@ const TranslatorExtension = new Lang.Class({
         this._dialog.close();
     },
 
-    enable: function() {
+    enable() {
         if(Utils.SETTINGS.get_boolean(PrefsKeys.SHOW_ICON_KEY)) {
             if(!this._panel_button) {
                 this._add_panel_button();
@@ -1043,7 +1043,7 @@ const TranslatorExtension = new Lang.Class({
             );
     },
 
-    disable: function() {
+    disable() {
         this.close();
         this._dialog.destroy();
         this._translators_manager.destroy();

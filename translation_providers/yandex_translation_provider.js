@@ -8,7 +8,7 @@ const Translator = new Lang.Class({
     Name: ENGINE,
     Extends: TranslationProviderBase.TranslationProviderBase,
 
-    _init: function() {
+    _init() {
         this.engine = ENGINE
         this.parent(ENGINE+'.Translate');
     },

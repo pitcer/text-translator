@@ -12,11 +12,11 @@ const TYPE_TARGET = 'target';
 const LanguagesStats = new Lang.Class({
     Name: 'LanguagesStats',
 
-    _init: function() {
+    _init() {
         this._reload();
     },
 
-    _reload: function() {
+    _reload() {
         this._json_data = Utils.SETTINGS.get_string(
             PrefsKeys.LANGUAGES_STATS_KEY
         );
@@ -27,7 +27,7 @@ const LanguagesStats = new Lang.Class({
         }
     },
 
-    increment: function(translator_name, type, lang_data) {
+    increment(translator_name, type, lang_data) {
         let key_string = "%s-%s-%s".format(
             translator_name,
             type,
@@ -49,7 +49,7 @@ const LanguagesStats = new Lang.Class({
         this.save();
     },
 
-    get_n_most_used: function(translator_name, type, n) {
+    get_n_most_used(translator_name, type, n) {
         n = n || 5;
         let key_string = "%s-%s".format(translator_name, type);
         let keys = Object.keys(this._storage);
@@ -74,7 +74,7 @@ const LanguagesStats = new Lang.Class({
         return result.slice(0);
     },
 
-    save: function() {
+    save() {
         Utils.SETTINGS.set_string(
             PrefsKeys.LANGUAGES_STATS_KEY,
             JSON.stringify(this._storage)

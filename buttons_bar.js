@@ -10,7 +10,7 @@ const Utils = Me.imports.utils;
 const ButtonsBarButton = new Lang.Class({
     Name: 'ButtonsBarButton',
 
-    _init: function(icon_name, label_text, tip_text, params, action) {
+    _init(icon_name, label_text, tip_text, params, action) {
         this.params = Params.parse(params, {
             button_style_class: 'translator-button',
             box_style_class: 'translator-button-box',
@@ -87,7 +87,7 @@ const ButtonsBarButton = new Lang.Class({
         }
     },
 
-    _on_enter_event: function(object, event) {
+    _on_enter_event(object, event) {
         if(this.params.statusbar && !Utils.is_blank(this._tip_text)) {
             this._statusbar_message_id = this.params.statusbar.add_message(
                 this._tip_text
@@ -106,7 +106,7 @@ const ButtonsBarButton = new Lang.Class({
         }
     },
 
-    _on_leave_event: function(object, event) {
+    _on_leave_event(object, event) {
         if(this.params.statusbar && !Utils.is_blank(this._tip_text)) {
             this.params.statusbar.remove_message(this._statusbar_message_id);
         }
@@ -123,11 +123,11 @@ const ButtonsBarButton = new Lang.Class({
         }
     },
 
-    connect: function(signal, callback) {
+    connect(signal, callback) {
         this.button.connect(signal, callback);
     },
 
-    set_checked: function(checked) {
+    set_checked(checked) {
         if(checked) {
             this.button.add_style_pseudo_class('active');
         }
@@ -138,15 +138,15 @@ const ButtonsBarButton = new Lang.Class({
         this.button.set_checked(checked);
     },
 
-    get_checked: function() {
+    get_checked() {
         return this.button.get_checked();
     },
 
-    set_sensitive: function(sensitive) {
+    set_sensitive(sensitive) {
         this._sensitive = sensitive;
     },
 
-    destroy: function() {
+    destroy() {
         this.params = null;
         this._label_text = null;
         this._tip_text = null;
@@ -197,7 +197,7 @@ const ButtonsBarButton = new Lang.Class({
 const ButtonsBarLabel = new Lang.Class({
     Name: 'ButtonsBarLabel',
 
-    _init: function(text, style_class) {
+    _init(text, style_class) {
         this._label = new St.Label({
             style_class: style_class
         });
@@ -223,7 +223,7 @@ const ButtonsBarLabel = new Lang.Class({
 const ButtonsBar = new Lang.Class({
     Name: 'ButtonsBar',
 
-    _init: function(params) {
+    _init(params) {
         this.params = Params.parse(params, {
             style_class: 'translator-buttons-bar-box'
         });
@@ -234,7 +234,7 @@ const ButtonsBar = new Lang.Class({
         this._buttons = [];
     },
 
-    add_button: function(button) {
+    add_button(button) {
         this._buttons.push(button);
         this.actor.add(button.actor, {
             x_fill: false,
@@ -242,14 +242,14 @@ const ButtonsBar = new Lang.Class({
         });
     },
 
-    clear: function() {
+    clear() {
         for(let i = 0; i < this._buttons.length; i++) {
             let button = this._buttons[i];
             button.destroy();
         }
     },
 
-    destroy: function() {
+    destroy() {
         this.actor.destroy();
     }
 });

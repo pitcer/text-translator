@@ -83,7 +83,7 @@ const LANGUAGES_LIST = {
 const TranslationProviderPrefs = new Lang.Class({
     Name: "TranslationProviderPrefs",
 
-    _init: function(provider_name) {
+    _init(provider_name) {
         this._name = provider_name;
 
         this._settings_connect_id = Utils.SETTINGS.connect(
@@ -100,7 +100,7 @@ const TranslationProviderPrefs = new Lang.Class({
         this._load_prefs();
     },
 
-    _load_prefs: function() {
+    _load_prefs() {
         let json_string = Utils.SETTINGS.get_string(
             PrefsKeys.TRANSLATORS_PREFS_KEY
         );
@@ -121,7 +121,7 @@ const TranslationProviderPrefs = new Lang.Class({
         this._remember_last_lang = prefs.remember_last_lang || false;
     },
 
-    save_prefs: function(new_prefs) {
+    save_prefs(new_prefs) {
         let json_string = Utils.SETTINGS.get_string(
             PrefsKeys.TRANSLATORS_PREFS_KEY
         );
@@ -144,7 +144,7 @@ const TranslationProviderPrefs = new Lang.Class({
         );
     },
 
-    destroy: function() {
+    destroy() {
         if(this._settings_connect_id > 0) {
             Utils.SETTINGS.disconnect(this._settings_connect_id);
         }
@@ -214,14 +214,14 @@ const TranslationProviderPrefs = new Lang.Class({
 const TranslationProviderBase = new Lang.Class({
     Name: 'Translate Shell',
 
-    _init: function(name, limit, url) {
+    _init(name, limit, url) {
         this._name = name;
         this._limit = limit;
         this._url = url;
         this.prefs = new TranslationProviderPrefs(this._name);
     },
 
-    _get_data_async: function(url, callback) {
+    _get_data_async(url, callback) {
         let request = Soup.Message.new('GET', url);
 
         _httpSession.queue_message(request, Lang.bind(this,
@@ -242,7 +242,7 @@ const TranslationProviderBase = new Lang.Class({
         ));
     },
 
-    make_url: function(source_lang, target_lang, text) {
+    make_url(source_lang, target_lang, text) {
         let result = this._url.format(
             source_lang,
             target_lang,
@@ -251,25 +251,25 @@ const TranslationProviderBase = new Lang.Class({
         return result;
     },
 
-    get_languages: function() {
+    get_languages() {
         return LANGUAGES_LIST;
     },
 
-    get_language_name: function(lang_code) {
+    get_language_name(lang_code) {
         return LANGUAGES_LIST[lang_code] || false;
     },
 
-    get_pairs: function(language) {
+    get_pairs(language) {
         return LANGUAGES_LIST
         // throw new Error('Not implemented');
     },
 
-    parse_response: function(helper_source_data) {
+    parse_response(helper_source_data) {
         throw new Error('Not implemented');
     },
 
 
-    translate: function(source_lang, target_lang, text, callback) {
+    translate(source_lang, target_lang, text, callback) {
         let command = [
             'trans',
             '-e', this.engine,
@@ -290,7 +290,7 @@ const TranslationProviderBase = new Lang.Class({
         })
     },
 
-    _escape_translation: function(str) {
+    _escape_translation(str) {
       if (!str) return ''
 
       let stuff = {
@@ -306,11 +306,11 @@ const TranslationProviderBase = new Lang.Class({
       return str
     },
 
-    _replace_all: function(str, find, replace) {
+    _replace_all(str, find, replace) {
       return (str || '').split(find).join(replace)
     },
 
-    _escape_html: function(str) {
+    _escape_html(str) {
       return (str || '')
           .replace(/&/g, '&amp;')
           .replace(/"/g, '&quot;')
@@ -319,7 +319,7 @@ const TranslationProviderBase = new Lang.Class({
           .replace(/>/g, '&gt;');
     },
 
-    _exec: function(cmd, exec_cb) {
+    _exec(cmd, exec_cb) {
 
         try {
         var [res, pid, in_fd, out_fd, err_fd] = GLib.spawn_async_with_pipes(null, cmd, null, GLib.SpawnFlags.SEARCH_PATH, null);
@@ -355,7 +355,7 @@ const TranslationProviderBase = new Lang.Class({
         return this._limit;
     },
 
-    destroy: function() {
+    destroy() {
         this.prefs.destroy();
     },
 });

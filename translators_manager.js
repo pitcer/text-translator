@@ -13,7 +13,7 @@ const TranslationProviderBase =
 const TranslatorsManager = new Lang.Class({
     Name: 'TranslatorsManager',
 
-    _init: function(extension_object) {
+    _init(extension_object) {
         this._extension_object = extension_object;
         this._translators = this._load_translators();
         this._default = this.get_by_name(
@@ -22,7 +22,7 @@ const TranslatorsManager = new Lang.Class({
         this._current = this._default;
     },
 
-    _load_translators: function() {
+    _load_translators() {
         let translators = [];
         let translators_imports = Me.imports.translation_providers;
         let files_list = Utils.get_files_in_dir(Me.path+'/translation_providers')
@@ -43,7 +43,7 @@ const TranslatorsManager = new Lang.Class({
         return translators;
     },
 
-    get_by_name: function(name) {
+    get_by_name(name) {
         if(Utils.is_blank(name)) return false;
 
         for(let i = 0; i < this._translators.length; i++) {
@@ -110,7 +110,7 @@ const TranslatorsManager = new Lang.Class({
         return this._translators.length;
     },
 
-    destroy: function() {
+    destroy() {
         for(let i = 0; i < this._translators.length; i++) {
             this._translators[i].destroy();
         }

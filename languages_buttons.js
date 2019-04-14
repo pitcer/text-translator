@@ -9,7 +9,7 @@ const ButtonsBar = Me.imports.buttons_bar;
 const LanguagesButtons = new Lang.Class({
     Name: 'LanguagesButtons',
 
-    _init: function(languages) {
+    _init(languages) {
         this._langs = languages || [];
 
         this._box = new St.BoxLayout();
@@ -27,7 +27,7 @@ const LanguagesButtons = new Lang.Class({
         this._show_buttons();
     },
 
-    _show_buttons: function() {
+    _show_buttons() {
         if(this._langs.length > 0) {
             this._label.hide();
             this.buttons.actor.show();
@@ -57,22 +57,22 @@ const LanguagesButtons = new Lang.Class({
         }
     },
 
-    reload: function() {
+    reload() {
         this.buttons.clear();
         this._show_buttons();
     },
 
-    add_languages: function(new_langs) {
+    add_languages(new_langs) {
         this._langs = this._langs.concat(new_langs);
         this.reload();
     },
 
-    set_languages: function(new_langs) {
+    set_languages(new_langs) {
         this._langs = new_langs;
         this.reload();
     },
 
-    select: function(lang_code) {
+    select(lang_code) {
         for(let i = 0; i < this._langs.length; i++) {
             let lang = this._langs[i];
 
@@ -86,7 +86,7 @@ const LanguagesButtons = new Lang.Class({
         }
     },
 
-    destroy: function() {
+    destroy() {
         this._langs = null;
         this._box.destroy();
     },

@@ -1,5 +1,7 @@
 ## Text Translator
 
+This is the fork of [Text Translator](https://extensions.gnome.org/extension/593/text-translator/) maintained by gufoe.
+
 Translation of the text by different translators (currently [Google.Translate](https://translate.google.com), [Yandex.Translate](https://translate.yandex.com/)).
 
 ### Installing translate-shell

@@ -8,7 +8,7 @@ const Me = ExtensionUtils.getCurrentExtension();
 const Utils = Me.imports.utils;
 const PrefsKeys = Me.imports.prefs_keys;
 
-const HelpDialog = class HelpDialog extends ModalDialog.ModalDialog {
+var HelpDialog = class HelpDialog extends ModalDialog.ModalDialog {
 
     constructor() {
         super();

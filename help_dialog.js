@@ -17,8 +17,8 @@ const HelpDialog = class HelpDialog extends ModalDialog.ModalDialog {
             typeof this.dialogLayout === "undefined"
             ? this._dialogLayout
             : this.dialogLayout;
-        this._dialogLayout.connect('key-press-event', () => {
-            this._on_key_press_event
+        this._dialogLayout.connect('key-press-event', (object, event) => {
+            this._on_key_press_event(object, event);
         });
         this._dialogLayout.set_style_class_name('translator-help-box');
 

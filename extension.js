@@ -73,8 +73,8 @@ const TranslatorPanelButton = class TranslatorPanelButton extends PanelMenu.Butt
             reactive: true,
             track_hover: true
         });
-        this._icon.connect('button-press-event', () => {
-            this._on_button_press();
+        this._icon.connect('button-press-event', (object, event) => {
+            this._on_button_press(object, event);
         });
 
         this._add_menu_items();
@@ -114,8 +114,8 @@ const TranslatorPanelButton = class TranslatorPanelButton extends PanelMenu.Butt
         this.menu.addMenuItem(this._menu_open_prefs);
     }
 
-    _on_button_press(o, e) {
-        let button = e.get_button();
+    _on_button_press(object, event) {
+        let button = event.get_button();
 
         switch(button) {
             case Clutter.BUTTON_SECONDARY:
@@ -287,8 +287,8 @@ const TranslatorExtension = class TranslatorExtension {
                 }
             }
         );
-        this._dialog.dialog_layout.connect('key-press-event', () => {
-            this._on_key_press_event();
+        this._dialog.dialog_layout.connect('key-press-event', (object, event) => {
+            this._on_key_press_event(object, event);
         });
         this._translators_manager = new TranslatorsManager.TranslatorsManager(
             this
@@ -368,15 +368,15 @@ const TranslatorExtension = class TranslatorExtension {
         this._source_language_chooser = new LanguageChooser.LanguageChooser(
             'Choose source language:'
         );
-        this._source_language_chooser.connect('language-chose', () => {
-            this._on_source_language_chose
+        this._source_language_chooser.connect('language-chose', (object, language) => {
+            this._on_source_language_chose(object, language);
         });
 
         this._target_language_chooser = new LanguageChooser.LanguageChooser(
             'Choose target language:'
         );
-        this._target_language_chooser.connect('language-chose', () => {
-            this._on_target_language_chose
+        this._target_language_chooser.connect('language-chose', (object, language) => {
+            this._on_target_language_chose(object, language);
         });
     }
 

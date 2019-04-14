@@ -58,8 +58,8 @@ const EntryBase = class EntryBase {
         this._clutter_text.set_line_wrap(true);
         this._clutter_text.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR);
         this._clutter_text.set_max_length(0);
-        this._clutter_text.connect('key-press-event', () => {
-            this._on_key_press_event();
+        this._clutter_text.connect('key-press-event', (object, event) => {
+            this._on_key_press_event(object, event);
         });
         this.set_font_size(Utils.SETTINGS.get_int(PrefsKeys.FONT_SIZE_KEY));
 
@@ -81,10 +81,10 @@ const EntryBase = class EntryBase {
         this.scroll.add_actor(this._box);
     }
 
-    _on_key_press_event(o, e) {
-        let symbol = e.get_key_symbol();
-        let code = e.get_key_code();
-        let state = e.get_state();
+    _on_key_press_event(object, event) {
+        let symbol = event.get_key_symbol();
+        let code = event.get_key_code();
+        let state = event.get_state();
 
         let cyrillic_control = 8196;
         let cyrillic_shift = 8192;

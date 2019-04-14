@@ -73,11 +73,11 @@ var ButtonsBarButton = class ButtonsBarButton {
 
         this._button.connect(
             'enter-event',
-            () => { this._on_enter_event(); }
+            (object, event) => { this._on_enter_event(object, event); }
         );
         this._button.connect(
             'leave-event',
-            () => { this._on_leave_event(); }
+            (object, event) => { this._on_leave_event(object, event); }
         );
 
         if(!this._icon && !this._label) {

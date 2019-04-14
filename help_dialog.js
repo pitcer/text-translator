@@ -1,4 +1,3 @@
-const Lang = imports.lang;
 const St = imports.gi.St;
 const Main = imports.ui.main;
 const Clutter = imports.gi.Clutter;
@@ -18,9 +17,9 @@ const HelpDialog = class extends ModalDialog.ModalDialog {
             typeof this.dialogLayout === "undefined"
             ? this._dialogLayout
             : this.dialogLayout;
-        this._dialogLayout.connect('key-press-event', Lang.bind(this,
+        this._dialogLayout.connect('key-press-event', () => {
             this._on_key_press_event
-        ));
+        });
         this._dialogLayout.set_style_class_name('translator-help-box');
 
         this._label = new St.Label({
@@ -76,9 +75,9 @@ const HelpDialog = class extends ModalDialog.ModalDialog {
         let button = new St.Button({
             reactive: true
         });
-        button.connect('clicked', Lang.bind(this, function() {
+        button.connect('clicked', () => {
             this.close();
-        }));
+        });
         button.add_actor(icon);
 
         return button;

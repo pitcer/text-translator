@@ -1,4 +1,3 @@
-const Lang = imports.lang;
 const GObject = imports.gi.GObject;
 const Gtk = imports.gi.Gtk;
 const Gio = imports.gi.Gio;
@@ -39,10 +38,10 @@ const TranslatorProvidersWidget = GObject.registerClass(
         this._translators_combo = this._get_combo(names, 0);
         this._translators_combo.set_active_id(names[0]);
         this._translators_combo.connect('changed',
-            Lang.bind(this, function(combo) {
+            (combo) => {
                 let name = combo.get_active_id();
                 this._show_settings(name);
-            })
+            }
         );
         this.attach( // col, row, colspan, rowspan
             this._translators_combo,
@@ -98,12 +97,12 @@ const TranslatorProvidersWidget = GObject.registerClass(
         this._last_used = new Gtk.Switch({
             active: false
         });
-        this._last_used.connect('notify::active', Lang.bind(this, function(s) {
+        this._last_used.connect('notify::active', (s) => {
             let active = s.get_active();
             let name = this._translators_combo.get_active_id();
             let translator = this._translators_manager.get_by_name(name);
             translator.prefs.remember_last_lang = active;
-        }));
+        });
         this.attach(
             this._last_used,
             this.POSITIONS.last_used.col,
@@ -130,7 +129,7 @@ const TranslatorProvidersWidget = GObject.registerClass(
 
         this._source_languages_combo = new Gtk.ComboBoxText();
         this._source_languages_combo.connect('changed',
-            Lang.bind(this, function(combo) {
+            (combo) => {
                 let name = this._translators_combo.get_active_id();
                 let translator = this._translators_manager.get_by_name(name);
                 let lang_code = combo.get_active_id();
@@ -146,7 +145,7 @@ const TranslatorProvidersWidget = GObject.registerClass(
                 }
 
                 this._load_default_target(languages, active_id);
-            })
+            }
         );
 
         for(let key in languages) {
@@ -181,7 +180,7 @@ const TranslatorProvidersWidget = GObject.registerClass(
 
         this._target_languages_combo = new Gtk.ComboBoxText();
         this._target_languages_combo.connect('changed',
-            Lang.bind(this, function(combo) {
+            (combo) => {
                 let name = this._translators_combo.get_active_id();
                 let translator = this._translators_manager.get_by_name(name);
                 let lang_code = combo.get_active_id();
@@ -189,7 +188,7 @@ const TranslatorProvidersWidget = GObject.registerClass(
                 if(!translator || translator.prefs.default_target == lang_code) return;
 
                 translator.prefs.default_target = lang_code;
-            })
+            }
         );
 
         for(let key in languages) {
@@ -283,7 +282,7 @@ const TranslatorKeybindingsWidget = GObject.registerClass(
             'accel-mode': Gtk.CellRendererAccelMode.GTK
         });
         keybinding_renderer.connect('accel-edited',
-            Lang.bind(this, function(renderer, iter, key, mods) {
+            (renderer, iter, key, mods) => {
                 let value = Gtk.accelerator_name(key, mods);
                 let [success, iterator ] =
                     this._store.get_iter_from_string(iter);
@@ -300,7 +299,7 @@ const TranslatorKeybindingsWidget = GObject.registerClass(
                     [mods, key]
                 );
                 Utils.SETTINGS.set_strv(name, [value]);
-            })
+            }
         );
 
         let keybinding_column = new Gtk.TreeViewColumn({
@@ -377,14 +376,14 @@ const TranslatorPrefsGrid = GObject.registerClass(
             hexpand: false
         });
         item.set_text(this._settings.get_strv(settings_key)[0]);
-        item.connect('changed', Lang.bind(this, function(entry) {
+        item.connect('changed', (entry) => {
             let [key, mods] = Gtk.accelerator_parse(entry.get_text());
 
             if(Gtk.accelerator_valid(key, mods)) {
                 let shortcut = Gtk.accelerator_name(key, mods);
                 this._settings.set_strv(settings_key, [shortcut]);
             }
-        }));
+        });
 
         return this.add_row(text, item);
     }
@@ -414,7 +413,7 @@ const TranslatorPrefsGrid = GObject.registerClass(
             item.set_active_id(this._settings.get_int(key).toString());
         }
 
-        item.connect('changed', Lang.bind(this, function(combo) {
+        item.connect('changed', (combo) => {
             let value = combo.get_active_id();
 
             if(type === 'string') {
@@ -429,7 +428,7 @@ const TranslatorPrefsGrid = GObject.registerClass(
                     this._settings.set_int(key, value);
                 }
             }
-        }));
+        });
 
         return this.add_row(text, item);
     }
@@ -450,13 +449,13 @@ const TranslatorPrefsGrid = GObject.registerClass(
         let spin_button = new Gtk.SpinButton(spin_properties);
 
         spin_button.set_value(this._settings.get_int(key));
-        spin_button.connect('value-changed', Lang.bind(this, function(spin) {
+        spin_button.connect('value-changed', (spin) => {
             let value = spin.get_value_as_int();
 
             if(this._settings.get_int(key) !== value) {
                 this._settings.set_int(key, value);
             }
-        }));
+        });
 
         return this.add_row(label, spin_button, true);
     }
@@ -519,9 +518,9 @@ const TranslatorPrefsGrid = GObject.registerClass(
 
         range.set_size_request(range_properties.size, -1);
 
-        range.connect('value-changed', Lang.bind(this, function(slider) {
+        range.connect('value-changed', (slider) => {
             this._settings.set_int(key, slider.get_value());
-        }));
+        });
 
         return this.add_row(label, range, true);
     }

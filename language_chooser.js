@@ -1,5 +1,4 @@
 const St = imports.gi.St;
-const Lang = imports.lang;
 const Main = imports.ui.main;
 const ModalDialog = imports.ui.modalDialog;
 const Clutter = imports.gi.Clutter;
@@ -21,9 +20,9 @@ const LanguageChooser = class extends ModalDialog.ModalDialog {
             typeof this.dialogLayout === "undefined"
             ? this._dialogLayout
             : this.dialogLayout;
-        this._dialogLayout.connect('key-press-event', Lang.bind(this,
+        this._dialogLayout.connect('key-press-event', () => {
             this._on_key_press_event
-        ));
+        });
         this._dialogLayout.set_style_class_name('translator-language-chooser');
 
         this._languages_grid_layout = new Clutter.GridLayout({
@@ -56,7 +55,7 @@ const LanguageChooser = class extends ModalDialog.ModalDialog {
             x_expand: false,
             y_expand: false
         });
-        this._search_entry.connect('key-press-event', Lang.bind(this, function(o, e) {
+        this._search_entry.connect('key-press-event',(o, e) => {
             let symbol = e.get_key_symbol();
 
             if(symbol == Clutter.Escape) {
@@ -69,10 +68,10 @@ const LanguageChooser = class extends ModalDialog.ModalDialog {
             else {
                 return false;
             }
-        }));
+        });
         this._search_entry.clutter_text.connect(
             'text-changed',
-            Lang.bind(this, this._update_list)
+            () => { this._update_list(); }
         );
 
         this._info_label = new St.Label({
@@ -153,9 +152,9 @@ const LanguageChooser = class extends ModalDialog.ModalDialog {
             x_align: St.Align.END,
             y_align: St.Align.MIDDLE
         });
-        button.connect('clicked', Lang.bind(this, function() {
+        button.connect('clicked', () => {
             this.close();
-        }));
+        });
         button.add_actor(icon);
 
         return button;
@@ -172,12 +171,12 @@ const LanguageChooser = class extends ModalDialog.ModalDialog {
             x_expand: true,
             y_expand: false
         });
-        button.connect('clicked', Lang.bind(this, function() {
+        button.connect('clicked', () => {
             this.emit('language-chose', {
                 code: lang_code,
                 name: lang_name
             });
-        }));
+        });
         button.lang_code = lang_code;
         button.lang_name = lang_name;
 
@@ -216,12 +215,12 @@ const LanguageChooser = class extends ModalDialog.ModalDialog {
         if(!Utils.is_blank(list)) languages = list;
 
         let keys = Object.keys(languages);
-        keys.sort(Lang.bind(this, function(a, b) {
+        keys.sort((a, b) => {
             if(a === 'auto') return false;
             a = languages[a];
             b = languages[b];
             return a > b;
-        }));
+        });
 
         for (let code of keys) {
             let button = this._get_button(code, languages[code]);

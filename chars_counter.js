@@ -1,5 +1,4 @@
 const St = imports.gi.St;
-const Lang = imports.lang;
 const Tweener = imports.ui.tweener;
 
 const CharsCounter = class {
@@ -53,10 +52,10 @@ const CharsCounter = class {
             time: 0.3,
             transition: 'easeOutQuad',
             opacity: 0,
-            onComplete: Lang.bind(this, function() {
+            onComplete: () => {
                 this.actor.hide();
                 this.actor.opacity = 255;
-            })
+            }
         });
     }
 
@@ -91,7 +90,7 @@ const CharsCounter = class {
             time: 0.2,
             transition: 'easeOutQuad',
             opacity: 100,
-            onComplete: Lang.bind(this, function() {
+            onComplete: () => {
                 clutter_text.set_markup(markup);
 
                 Tweener.addTween(this._current_length_label, {
@@ -99,7 +98,7 @@ const CharsCounter = class {
                     transition: 'easeOutQuad',
                     opacity: 255
                 });
-            })
+            }
         });
 
         clutter_text.set_markup(markup);
@@ -114,7 +113,7 @@ const CharsCounter = class {
             time: 0.2,
             transition: 'easeOutQuad',
             opacity: 100,
-            onComplete: Lang.bind(this, function() {
+            onComplete: () => {
                 clutter_text.set_markup(markup);
 
                 Tweener.addTween(this._max_length_label, {
@@ -122,7 +121,7 @@ const CharsCounter = class {
                     transition: 'easeOutQuad',
                     opacity: 255
                 });
-            })
+            }
         });
 
         clutter_text.set_markup(markup);

@@ -1,6 +1,5 @@
 const St = imports.gi.St;
 const Gio = imports.gi.Gio;
-const Lang = imports.lang;
 const Animation = imports.ui.animation;
 const Tweener = imports.ui.tweener;
 const Mainloop = imports.mainloop;
@@ -128,17 +127,17 @@ const StatusBar = class {
             time: 0.3,
             opacity: 255,
             transition: 'easeOutQuad',
-            onComplete: Lang.bind(this, function() {
+            onComplete: () => {
                 let timeout = parseInt(message.timeout, 10);
 
                 if(timeout > 0) {
                     Mainloop.timeout_add(message.timeout,
-                        Lang.bind(this, function() {
+                        () => {
                             this.remove_message(id);
-                        })
+                        }
                     );
                 }
-            })
+            }
         });
     }
 
@@ -152,9 +151,9 @@ const StatusBar = class {
             time: 0.3,
             opacity: 0,
             transition: 'easeOutQuad',
-            onComplete: Lang.bind(this, function() {
+            onComplete: () => {
                 this.actor.hide();
-            })
+            }
         });
     }
 

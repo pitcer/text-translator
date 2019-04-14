@@ -1,4 +1,3 @@
-const Lang = imports.lang;
 const Signals = imports.signals;
 const ExtensionUtils = imports.misc.extensionUtils;
 
@@ -53,13 +52,13 @@ const LanguagesStats = class {
         let key_string = "%s-%s".format(translator_name, type);
         let keys = Object.keys(this._storage);
 
-        let filtered = keys.filter(Lang.bind(this, function(key) {
+        let filtered = keys.filter((key) => {
             if(this._storage[key].count <= 3) return false;
             return Utils.starts_with(key, key_string);
-        }));
-        filtered.sort(Lang.bind(this, function(a, b) {
+        });
+        filtered.sort((a, b) => {
                 return this._storage[b].count > this._storage[a].count;
-        }));
+        });
 
         let result = [];
 

@@ -1,4 +1,3 @@
-const Lang = imports.lang;
 const ExtensionUtils = imports.misc.extensionUtils;
 
 const GLib = imports.gi.GLib;

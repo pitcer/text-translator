@@ -1,5 +1,4 @@
 const St = imports.gi.St;
-const Lang = imports.lang;
 const Signals = imports.signals;
 const ExtensionUtils = imports.misc.extensionUtils;
 
@@ -45,9 +44,9 @@ const LanguagesButtons = class {
                 );
                 this._langs[i].button = button;
                 let lang_data = this._langs[i];
-                button.connect("clicked", Lang.bind(this, function() {
+                button.connect("clicked", () => {
                     this.emit("clicked", lang_data);
-                }));
+                });
                 this.buttons.add_button(button);
             }
         }

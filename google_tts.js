@@ -1,4 +1,3 @@
-const Lang = imports.lang;
 const Gst = imports.gi.Gst;
 
 const URI = 'https://translate.google.com/translate_tts?client=tw-ob&ie=UTF-8&total=1&idx=0&textlen=%d&q=%s&tl=%s';
@@ -13,8 +12,8 @@ const GoogleTTS = class {
         this._bus = this._player.get_bus();
         this._bus.add_signal_watch();
 
-        this._bus.connect("message::error", Lang.bind(this, this._kill_stream));
-        this._bus.connect("message::eos", Lang.bind(this, this._kill_stream));
+        this._bus.connect("message::error", () => { this._kill_stream(); });
+        this._bus.connect("message::eos", () => { this._kill_stream(); });
     }
 
     _kill_stream() {

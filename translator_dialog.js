@@ -1,5 +1,4 @@
 const St = imports.gi.St;
-const Lang = imports.lang;
 const Main = imports.ui.main;
 const ModalDialog = imports.ui.modalDialog;
 const Clutter = imports.gi.Clutter;
@@ -38,9 +37,9 @@ const EntryBase = class {
             y_align: St.Align.MIDDLE
         });
         this.actor.connect('button-press-event',
-            Lang.bind(this, function() {
+            () => {
                 this._clutter_text.grab_key_focus();
-            })
+            }
         );
         this.actor.add(this.scroll, {
             x_fill: true,
@@ -59,16 +58,16 @@ const EntryBase = class {
         this._clutter_text.set_line_wrap(true);
         this._clutter_text.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR);
         this._clutter_text.set_max_length(0);
-        this._clutter_text.connect('key-press-event', Lang.bind(this,
-            this._on_key_press_event
-        ));
+        this._clutter_text.connect('key-press-event', () => {
+            this._on_key_press_event();
+        });
         this.set_font_size(Utils.SETTINGS.get_int(PrefsKeys.FONT_SIZE_KEY));
 
         this._font_connection_id = Utils.SETTINGS.connect(
             "changed::" + PrefsKeys.FONT_SIZE_KEY,
-            Lang.bind(this, function() {
+            () => {
                 this.set_font_size(Utils.SETTINGS.get_int(PrefsKeys.FONT_SIZE_KEY));
-            })
+            }
         );
 
         this._box = new St.BoxLayout({
@@ -128,7 +127,7 @@ const EntryBase = class {
         // cyrillic Ctrl+V
         else if(control_mask && code == 55) {
             let clipboard = St.Clipboard.get_default();
-            clipboard.get_text(Lang.bind(this, function(clipboard, text) {
+            clipboard.get_text((clipboard, text) => {
                 if(!Utils.is_blank(text)) {
                     this._clutter_text.delete_selection();
                     this._clutter_text.set_text(
@@ -138,7 +137,7 @@ const EntryBase = class {
                 }
 
                 return false;
-            }));
+            });
         }
         else if(
             (state == Clutter.ModifierType.CONTROL_MASK || state == cyrillic_control) &&
@@ -230,9 +229,9 @@ const SourceEntry = class extends EntryBase {
         })
 
         let v_adjust = this.scroll.vscroll.adjustment;
-        v_adjust.connect('changed', Lang.bind(this, function () {
+        v_adjust.connect('changed', () => {
             v_adjust.value = v_adjust.upper - v_adjust.page_size;
-        }));
+        });
     }
 }
 
@@ -300,17 +299,17 @@ const TranslatorDialog = class extends ModalDialog.ModalDialog {
         this._source = new SourceEntry();
         this._source.clutter_text.connect(
             'text-changed',
-            Lang.bind(this, this._on_source_changed)
+            () => { this._on_source_changed(); }
         );
         this._source.connect('max-length-changed',
-            Lang.bind(this, function() {
+            () => {
                 this._chars_counter.max_length = this._source.max_length;
-            })
+            }
         );
         this._target = new TargetEntry();
         this._target.clutter_text.connect(
             'text-changed',
-            Lang.bind(this, this._on_target_changed)
+            () => { this._on_target_changed(); }
         );
 
         this._connection_ids = {
@@ -343,23 +342,23 @@ const TranslatorDialog = class extends ModalDialog.ModalDialog {
         this._listen_source_button = new ListenButton();
         this._listen_source_button.hide();
         this._listen_source_button.actor.connect('clicked',
-            Lang.bind(this, function() {
+            () => {
                 this.google_tts.speak(
                     this._source.text,
                     this._text_translator.current_source_lang
                 )
-            }))
+            })
         this._listen_target_button = new ListenButton();
         this._listen_target_button.hide();
         this._listen_target_button.actor.connect('clicked',
-            Lang.bind(this, function() {
+            () => {
                 let lines_count = this._source.text.split('\n').length;
                 let translation = this._target.text.split('\n').slice(0, lines_count).join('\n');
                 this.google_tts.speak(
                     translation,
                     this._text_translator.current_target_lang
                 )
-            }))
+            })
 
         this._grid_layout = new Clutter.GridLayout({
             orientation: Clutter.Orientation.VERTICAL
@@ -400,14 +399,14 @@ const TranslatorDialog = class extends ModalDialog.ModalDialog {
         }
         this._connection_ids.sync_scroll_settings = Utils.SETTINGS.connect(
             'changed::'+PrefsKeys.SYNC_ENTRIES_SCROLL_KEY,
-            Lang.bind(this, function() {
+            () => {
                 let sync = Utils.SETTINGS.get_boolean(
                     PrefsKeys.SYNC_ENTRIES_SCROLL_KEY
                 );
 
                 if(sync) this.sync_entries_scroll();
                 else this.unsync_entries_scroll();
-            })
+            }
         );
     }
 
@@ -417,14 +416,14 @@ const TranslatorDialog = class extends ModalDialog.ModalDialog {
         }
         this._connection_ids.show_most_used = Utils.SETTINGS.connect(
             'changed::%s'.format(PrefsKeys.SHOW_MOST_USED_KEY),
-            Lang.bind(this, function() {
+            () => {
                 if(Utils.SETTINGS.get_boolean(PrefsKeys.SHOW_MOST_USED_KEY)) {
                     this._show_most_used_bar();
                 }
                 else {
                     this._hide_most_used_bar();
                 }
-            })
+            }
         );
     }
 
@@ -504,7 +503,7 @@ const TranslatorDialog = class extends ModalDialog.ModalDialog {
             let source_v_adjust = this._source.scroll.vscroll.adjustment;
             this._connection_ids.source_scroll = source_v_adjust.connect(
                 'notify::value',
-                Lang.bind(this, function(adjustment) {
+                (adjustment) => {
                     let target_adjustment =
                         this._target.scroll.vscroll.adjustment;
 
@@ -514,7 +513,7 @@ const TranslatorDialog = class extends ModalDialog.ModalDialog {
                         adjustment.upper > target_adjustment.upper
                         ? adjustment.upper
                         : target_adjustment.upper;
-                })
+                }
             );
         }
 
@@ -522,7 +521,7 @@ const TranslatorDialog = class extends ModalDialog.ModalDialog {
             let target_v_adjust = this._target.scroll.vscroll.adjustment;
             this._connection_ids.target_scroll = target_v_adjust.connect(
                 'notify::value',
-                Lang.bind(this, function(adjustment) {
+                (adjustment) => {
                     let source_adjustment =
                         this._source.scroll.vscroll.adjustment;
 
@@ -533,7 +532,7 @@ const TranslatorDialog = class extends ModalDialog.ModalDialog {
                         adjustment.upper > source_adjustment.upper
                         ? adjustment.upper
                         : source_adjustment.upper;
-                })
+                }
             );
         }
     }

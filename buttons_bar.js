@@ -1,5 +1,4 @@
 const St = imports.gi.St;
-const Lang = imports.lang;
 const Params = imports.misc.params;
 const Tweener = imports.ui.tweener;
 const ExtensionUtils = imports.misc.extensionUtils;
@@ -36,9 +35,9 @@ const ButtonsBarButton = class {
         this._button_box.add_actor(this._button);
 
         if(typeof(action) == 'function') {
-            this._button.connect('clicked', Lang.bind(this, function() {
+            this._button.connect('clicked', () => {
                 if(this._sensitive) action();
-            }));
+            });
         }
 
         this._icon = false;
@@ -74,11 +73,11 @@ const ButtonsBarButton = class {
 
         this._button.connect(
             'enter-event',
-            Lang.bind(this, this._on_enter_event)
+            () => { this._on_enter_event(); }
         );
         this._button.connect(
             'leave-event',
-            Lang.bind(this, this._on_leave_event)
+            () => { this._on_leave_event(); }
         );
 
         if(!this._icon && !this._label) {
@@ -115,9 +114,9 @@ const ButtonsBarButton = class {
                 time: 0.3,
                 opacity: 0,
                 transition: 'easeOutQuad',
-                onComplete: Lang.bind(this, function() {
+                onComplete: () => {
                     this._label.hide();
-                })
+                }
             });
         }
     }

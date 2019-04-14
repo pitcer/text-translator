@@ -1,4 +1,3 @@
-const Lang = imports.lang;
 const Soup = imports.gi.Soup;
 const ExtensionUtils = imports.misc.extensionUtils;
 
@@ -87,7 +86,7 @@ const TranslationProviderPrefs = class {
 
         this._settings_connect_id = Utils.SETTINGS.connect(
             'changed::'+PrefsKeys.TRANSLATORS_PREFS_KEY,
-            Lang.bind(this, this._load_prefs)
+            () => { this._load_prefs(); }
         );
 
         this._last_source;
@@ -222,22 +221,20 @@ const TranslationProviderBase = class {
     _get_data_async(url, callback) {
         let request = Soup.Message.new('GET', url);
 
-        _httpSession.queue_message(request, Lang.bind(this,
-            function(_httpSession, message) {
-                if(message.status_code === 200) {
-                    try {
-                        callback(request.response_body.data);
-                    }
-                    catch(e) {
-                        log('Error: '+e);
-                        callback('');
-                    }
+        _httpSession.queue_message(request, (_httpSession, message) => {
+            if(message.status_code === 200) {
+                try {
+                    callback(request.response_body.data);
                 }
-                else {
+                catch(e) {
+                    log('Error: '+e);
                     callback('');
                 }
             }
-        ));
+            else {
+                callback('');
+            }
+        });
     }
 
     make_url(source_lang, target_lang, text) {

@@ -14,10 +14,8 @@ ExtensionUtils.get_text_translator_extension = function() {
     return Me;
 }
 
-const TranslatorProvidersWidget = new GObject.Class({
-    Name: 'Translator.Providers.Widget',
-    GTypeName: 'TranslatorProvidersWidget',
-    Extends: Gtk.Grid,
+const TranslatorProvidersWidget = GObject.registerClass(
+    class TranslatorProvidersWidget extends Gtk.Grid {
 
     _init() {
         this.parent();
@@ -115,7 +113,7 @@ const TranslatorProvidersWidget = new GObject.Class({
         );
 
         this._show_settings(names[0]);
-    },
+    }
 
     _get_combo(items) {
         let combo_box = new Gtk.ComboBoxText();
@@ -125,7 +123,7 @@ const TranslatorProvidersWidget = new GObject.Class({
         }
 
         return combo_box;
-    },
+    }
 
     _load_default_source(languages, active_id) {
         this._source_languages_combo.destroy();
@@ -176,7 +174,7 @@ const TranslatorProvidersWidget = new GObject.Class({
             this.POSITIONS.default_source.colspan,
             this.POSITIONS.default_source.rowspan
         );
-    },
+    }
 
     _load_default_target(languages, active_id) {
         this._target_languages_combo.destroy();
@@ -219,7 +217,7 @@ const TranslatorProvidersWidget = new GObject.Class({
             this.POSITIONS.default_target.colspan,
             this.POSITIONS.default_target.rowspan
         );
-    },
+    }
 
     _show_settings(name) {
         let translator = this._translators_manager.get_by_name(name);
@@ -231,13 +229,11 @@ const TranslatorProvidersWidget = new GObject.Class({
         this._load_default_target(target_langs, translator.prefs.default_target);
 
         this._last_used.set_active(translator.prefs.remember_last_lang);
-    },
+    }
 });
 
-const TranslatorKeybindingsWidget = new GObject.Class({
-    Name: 'Translator.Keybindings.Widget',
-    GTypeName: 'TranslatorKeybindingsWidget',
-    Extends: Gtk.Box,
+const TranslatorKeybindingsWidget = GObject.registerClass(
+    class TranslatorKeybindingsWidget extends Gtk.Box {
 
     _init(keybindings) {
         this.parent();
@@ -327,7 +323,7 @@ const TranslatorKeybindingsWidget = new GObject.Class({
         this.add(scrolled_window);
 
         this._refresh();
-    },
+    }
 
     _refresh() {
         this._store.clear();
@@ -356,17 +352,15 @@ const TranslatorKeybindingsWidget = new GObject.Class({
     }
 });
 
-const TranslatorPrefsGrid = new GObject.Class({
-    Name: 'Translator.Prefs.Grid',
-    GTypeName: 'TranslatorPrefsGrid',
-    Extends: Gtk.Grid,
+const TranslatorPrefsGrid = GObject.registerClass(
+    class TranslatorPrefsGrid extends Gtk.Grid {
 
     _init(params) {
         this.parent(params);
         this._settings = Utils.SETTINGS;
         this.margin = this.row_spacing = this.column_spacing = 10;
         this._rownum = 0;
-    },
+    }
 
     add_entry(text, key) {
         let item = new Gtk.Entry({
@@ -376,7 +370,7 @@ const TranslatorPrefsGrid = new GObject.Class({
         this._settings.bind(key, item, 'text', Gio.SettingsBindFlags.DEFAULT);
 
         return this.add_row(text, item);
-    },
+    }
 
     add_shortcut(text, settings_key) {
         let item = new Gtk.Entry({
@@ -393,7 +387,7 @@ const TranslatorPrefsGrid = new GObject.Class({
         }));
 
         return this.add_row(text, item);
-    },
+    }
 
     add_boolean(text, key) {
         let item = new Gtk.Switch({
@@ -402,7 +396,7 @@ const TranslatorPrefsGrid = new GObject.Class({
         this._settings.bind(key, item, 'active', Gio.SettingsBindFlags.DEFAULT);
 
         return this.add_row(text, item);
-    },
+    }
 
     add_combo(text, key, list, type) {
         let item = new Gtk.ComboBoxText();
@@ -438,7 +432,7 @@ const TranslatorPrefsGrid = new GObject.Class({
         }));
 
         return this.add_row(text, item);
-    },
+    }
 
     add_spin(label, key, adjustment_properties, spin_properties) {
         adjustment_properties = Params.parse(adjustment_properties, {
@@ -465,7 +459,7 @@ const TranslatorPrefsGrid = new GObject.Class({
         }));
 
         return this.add_row(label, spin_button, true);
-    },
+    }
 
     add_row(text, widget, wrap) {
         let label = new Gtk.Label({
@@ -480,7 +474,7 @@ const TranslatorPrefsGrid = new GObject.Class({
         this._rownum++;
 
         return widget;
-    },
+    }
 
     add_item(widget, col, colspan, rowspan) {
         this.attach(
@@ -493,7 +487,7 @@ const TranslatorPrefsGrid = new GObject.Class({
         this._rownum++;
 
         return widget;
-    },
+    }
 
     add_range(label, key, range_properties) {
         range_properties = Params.parse(range_properties, {
@@ -533,10 +527,8 @@ const TranslatorPrefsGrid = new GObject.Class({
     }
 });
 
-const TextTranslatorPrefsWidget = new GObject.Class({
-    Name: 'TextTranslator.Prefs.Widget',
-    GTypeName: 'TextTranslatorPrefsWidget',
-    Extends: Gtk.Box,
+const TextTranslatorPrefsWidget = GObject.registerClass(
+    class TextTranslatorPrefsWidget extends Gtk.Box {
 
     _init(params) {
         this.parent(params);
@@ -567,7 +559,7 @@ const TextTranslatorPrefsWidget = new GObject.Class({
 
         this.add(stack_switcher);
         this.add(stack);
-    },
+    }
 
     _get_main_page() {
         let name = 'Main';
@@ -633,7 +625,7 @@ const TextTranslatorPrefsWidget = new GObject.Class({
             page: page
         };
         return result;
-    },
+    }
 
     _get_providers_page() {
         let name = 'Translators';
@@ -644,7 +636,7 @@ const TextTranslatorPrefsWidget = new GObject.Class({
             page: page
         };
         return result;
-    },
+    }
 
     _get_size_page() {
         let name = 'Size';
@@ -672,7 +664,7 @@ const TextTranslatorPrefsWidget = new GObject.Class({
             page: page
         };
         return result;
-    },
+    }
 
     _get_keybindings_page() {
         let name = 'Shortcuts';
@@ -692,7 +684,7 @@ const TextTranslatorPrefsWidget = new GObject.Class({
             page: page
         };
         return result;
-    },
+    }
 });
 
 function init(){

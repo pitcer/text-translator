@@ -9,11 +9,9 @@ const Me = ExtensionUtils.getCurrentExtension();
 const Utils = Me.imports.utils;
 const PrefsKeys = Me.imports.prefs_keys;
 
-const HelpDialog = new Lang.Class({
-    Name: 'HelpDialog',
-    Extends: ModalDialog.ModalDialog,
+const HelpDialog = class extends ModalDialog.ModalDialog {
 
-    _init() {
+    constructor() {
         this.parent();
 
         this._dialogLayout = 
@@ -58,7 +56,7 @@ const HelpDialog = new Lang.Class({
             y_fill: false,
             y_align: St.Align.END
         });
-    },
+    }
 
     _on_key_press_event(object, event) {
         let symbol = event.get_key_symbol();
@@ -66,7 +64,7 @@ const HelpDialog = new Lang.Class({
         if(symbol == Clutter.Escape) {
             this.close();
         }
-    },
+    }
 
     _get_close_button() {
         let icon = new St.Icon({
@@ -84,7 +82,7 @@ const HelpDialog = new Lang.Class({
         button.add_actor(icon);
 
         return button;
-    },
+    }
 
     _resize() {
         let width_percents = Utils.SETTINGS.get_int(PrefsKeys.WIDTH_PERCENTS_KEY);
@@ -98,15 +96,15 @@ const HelpDialog = new Lang.Class({
         let help_height = Math.round(translator_height * 0.9);
         this._dialogLayout.set_width(help_width);
         this._dialogLayout.set_height(help_height);
-    },
+    }
 
     close() {
         this.parent();
         this.destroy();
-    },
+    }
 
     open() {
         this._resize()
         this.parent()
-    },
-});
+    }
+}

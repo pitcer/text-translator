@@ -61,11 +61,9 @@ const CONNECTION_IDS = {
 
 const INSTANT_TRANSLATION_DELAY = 1000; // ms
 
-const TranslatorPanelButton = new Lang.Class({
-    Name: 'TranslatorPanelButton',
-    Extends: PanelMenu.Button,
+const TranslatorPanelButton = class extends PanelMenu.Button {
 
-    _init(translator) {
+    constructor(translator) {
         this.parent(0.0, 'text-translator');
         this.actor.reactive = false;
 
@@ -82,7 +80,7 @@ const TranslatorPanelButton = new Lang.Class({
 
         this._add_menu_items();
         this.actor.add_actor(this._icon);
-    },
+    }
 
     _add_menu_items() {
         let menu_item;
@@ -115,7 +113,7 @@ const TranslatorPanelButton = new Lang.Class({
             launch_extension_prefs(Me.uuid);
         }));
         this.menu.addMenuItem(this._menu_open_prefs);
-    },
+    }
 
     _on_button_press(o, e) {
         let button = e.get_button();
@@ -131,7 +129,7 @@ const TranslatorPanelButton = new Lang.Class({
                 this._translator.open();
                 break;
         }
-    },
+    }
 
     set_focus(focus) {
         if(focus) {
@@ -140,7 +138,7 @@ const TranslatorPanelButton = new Lang.Class({
         else {
             this.actor.remove_style_pseudo_class('active');
         }
-    },
+    }
 
     toggle_menu() {
         if(!this.menu.isOpen) {
@@ -198,14 +196,12 @@ const TranslatorPanelButton = new Lang.Class({
         }
 
         this.menu.toggle();
-    },
-});
+    }
+}
 
-const TranslatorsPopup = new Lang.Class({
-    Name: 'TranslatorsPopup',
-    Extends: PopupMenu.PopupMenu,
+const TranslatorsPopup = class extends PopupMenu.PopupMenu {
 
-    _init(button, dialog) {
+    constructor(button, dialog) {
         this._button = button;
         this._dialog = dialog;
 
@@ -230,7 +226,7 @@ const TranslatorsPopup = new Lang.Class({
                 if(this.isOpen) this.close(true);
             })
         );
-    },
+    }
 
     add_item(name, action) {
         let item = new PopupMenu.PopupMenuItem(name);
@@ -239,7 +235,7 @@ const TranslatorsPopup = new Lang.Class({
             this.close();
         }));
         this.addMenuItem(item);
-    },
+    }
 
     open() {
         this._button.set_sensitive(false);
@@ -247,7 +243,7 @@ const TranslatorsPopup = new Lang.Class({
         this.box.add(this._label_menu_item);
         this.parent(true);
         this.firstMenuItem.actor.grab_key_focus();
-    },
+    }
 
     close() {
         this.parent(true);
@@ -255,7 +251,7 @@ const TranslatorsPopup = new Lang.Class({
         this._button.actor.remove_style_pseudo_class('active');
         this._dialog.source.grab_key_focus();
         this.destroy();
-    },
+    }
 
     destroy() {
         this.removeAll();
@@ -266,12 +262,11 @@ const TranslatorsPopup = new Lang.Class({
         Main.sessionMode.disconnect(this._sessionUpdatedId);
         this._sessionUpdatedId = 0;
     }
-});
+}
 
-const TranslatorExtension = new Lang.Class({
-    Name: 'TranslatorExtension',
+const TranslatorExtension = class {
 
-    _init() {
+    constructor() {
         this._dialog = new TranslatorDialog.TranslatorDialog(this);
         this._dialog.source.clutter_text.connect('text-changed',
             Lang.bind(this, function() {
@@ -316,7 +311,7 @@ const TranslatorExtension = new Lang.Class({
             "changed::%s".format(PrefsKeys.SHOW_MOST_USED_KEY),
             Lang.bind(this, this._init_most_used)
         );
-    },
+    }
 
     _init_most_used() {
         if(!Utils.SETTINGS.get_boolean(PrefsKeys.SHOW_MOST_USED_KEY)) return;
@@ -341,7 +336,7 @@ const TranslatorExtension = new Lang.Class({
                 this._current_langs_changed();
             })
         );
-    },
+    }
 
     _show_most_used() {
         if(!Utils.SETTINGS.get_boolean(PrefsKeys.SHOW_MOST_USED_KEY)) return;
@@ -361,14 +356,14 @@ const TranslatorExtension = new Lang.Class({
         this._dialog.most_used.targets.set_languages(most_used_targets);
 
         this._most_used_bar_select_current();
-    },
+    }
 
     _most_used_bar_select_current() {
         if(!Utils.SETTINGS.get_boolean(PrefsKeys.SHOW_MOST_USED_KEY)) return;
 
         this._dialog.most_used.sources.select(this._current_source_lang);
         this._dialog.most_used.targets.select(this._current_target_lang);
-    },
+    }
 
     _init_languages_chooser() {
         this._source_language_chooser = new LanguageChooser.LanguageChooser(
@@ -384,7 +379,7 @@ const TranslatorExtension = new Lang.Class({
         this._target_language_chooser.connect('language-chose', Lang.bind(this,
             this._on_target_language_chose
         ));
-    },
+    }
 
     _remove_timeouts(timeout_key) {
         if(!Utils.is_blank(timeout_key)) {
@@ -399,7 +394,7 @@ const TranslatorExtension = new Lang.Class({
                 }
             }
         }
-    },
+    }
 
     _on_key_press_event(object, event) {
         let state = event.get_state();
@@ -467,7 +462,7 @@ const TranslatorExtension = new Lang.Class({
             // };
             // log(JSON.stringify(t, null, '\t'));
         }
-    },
+    }
 
     _set_current_translator(name) {
         this._translators_button.label = '<i>%s</i>'.format(name);
@@ -479,17 +474,17 @@ const TranslatorExtension = new Lang.Class({
         this._show_most_used();
 
         this._dialog.source.grab_key_focus();
-    },
+    }
 
     _set_current_source(lang_code) {
         this._current_source_lang = lang_code;
         this._translators_manager.current.prefs.last_source = lang_code;
-    },
+    }
 
     _set_current_target(lang_code) {
         this._current_target_lang = lang_code;
         this._translators_manager.current.prefs.last_target = lang_code;
-    },
+    }
 
     _set_current_languages() {
         let current_translator = this._translators_manager.current;
@@ -510,7 +505,7 @@ const TranslatorExtension = new Lang.Class({
         this._set_current_source(current_source);
         this._set_current_target(current_target);
         this._current_langs_changed();
-    },
+    }
 
     _swap_languages() {
         let current = this._translators_manager.current;
@@ -521,7 +516,7 @@ const TranslatorExtension = new Lang.Class({
         this._current_langs_changed();
         this._most_used_bar_select_current();
         this._translate();
-    },
+    }
 
     _reset_languages() {
         let current = this._translators_manager.current;
@@ -529,7 +524,7 @@ const TranslatorExtension = new Lang.Class({
         this._set_current_target(current.prefs.default_target);
         this._current_langs_changed();
         this._most_used_bar_select_current();
-    },
+    }
 
     _update_stats() {
         let source_data = {
@@ -554,12 +549,12 @@ const TranslatorExtension = new Lang.Class({
             LanguagesStats.TYPE_TARGET,
             target_data
         );
-    },
+    }
 
     _show_help() {
         let help_dialog = new Me.imports.help_dialog.HelpDialog;
         help_dialog.open();
-    },
+    }
 
     _on_source_language_chose(object, language) {
         this._most_used_bar_select_current();
@@ -567,7 +562,7 @@ const TranslatorExtension = new Lang.Class({
         this._current_langs_changed();
         this._source_language_chooser.close();
         this._translate();
-    },
+    }
 
     _on_target_language_chose(object, language) {
         this._most_used_bar_select_current();
@@ -575,7 +570,7 @@ const TranslatorExtension = new Lang.Class({
         this._current_langs_changed();
         this._target_language_chooser.close();
         this._translate();
-    },
+    }
 
     _current_langs_changed() {
         this._source_lang_button.label =
@@ -590,7 +585,7 @@ const TranslatorExtension = new Lang.Class({
                     this._current_target_lang
                 )
             );
-    },
+    }
 
     _get_source_lang_button() {
         let button_params = {
@@ -618,7 +613,7 @@ const TranslatorExtension = new Lang.Class({
         );
 
         return button;
-    },
+    }
 
     _get_target_lang_button() {
         let button_params = {
@@ -648,7 +643,7 @@ const TranslatorExtension = new Lang.Class({
         );
 
         return button;
-    },
+    }
 
     _get_swap_langs_button() {
         let button_params = {
@@ -664,7 +659,7 @@ const TranslatorExtension = new Lang.Class({
         );
 
         return button;
-    },
+    }
 
     _get_translators_button() {
         let button;
@@ -711,7 +706,7 @@ const TranslatorExtension = new Lang.Class({
         }
 
         return button;
-    },
+    }
 
     _get_translate_button() {
         let button_params = {
@@ -727,7 +722,7 @@ const TranslatorExtension = new Lang.Class({
         );
 
         return button;
-    },
+    }
 
     _get_instant_translation_button() {
         let button_params = {
@@ -757,7 +752,7 @@ const TranslatorExtension = new Lang.Class({
         button.set_checked(checked);
 
         return button;
-    },
+    }
 
     _get_help_button() {
         let button_params = {
@@ -773,7 +768,7 @@ const TranslatorExtension = new Lang.Class({
             Lang.bind(this, this._show_help));
 
         return button;
-    },
+    }
 
     _get_prefs_button() {
         let button_params = {
@@ -792,7 +787,7 @@ const TranslatorExtension = new Lang.Class({
         );
 
         return button;
-    },
+    }
 
     _get_close_button() {
         let button_params = {
@@ -810,7 +805,7 @@ const TranslatorExtension = new Lang.Class({
         );
 
         return button;
-    },
+    }
 
     _add_topbar_buttons() {
 
@@ -840,7 +835,7 @@ const TranslatorExtension = new Lang.Class({
 
         this._translate_button = this._get_translate_button();
         this._dialog.topbar.add_button(this._translate_button);
-    },
+    }
 
     _add_dialog_menu_buttons() {
         let instant_translation_button = this._get_instant_translation_button();
@@ -854,7 +849,7 @@ const TranslatorExtension = new Lang.Class({
 
         let close_button = this._get_close_button();
         this._dialog.dialog_menu.add_button(close_button);
-    },
+    }
 
     _translate() {
         if(Utils.is_blank(this._dialog.source.text)) return;
@@ -894,7 +889,7 @@ const TranslatorExtension = new Lang.Class({
                 }
             })
         );
-    },
+    }
 
     _translate_from_clipboard(clipboard_type) {
         this.open();
@@ -915,7 +910,7 @@ const TranslatorExtension = new Lang.Class({
             this._dialog.source.text = text;
             this._translate();
         }));
-    },
+    }
 
     _add_keybindings() {
         Main.wm.addKeybinding(
@@ -953,27 +948,27 @@ const TranslatorExtension = new Lang.Class({
                 this._translate_from_clipboard(St.ClipboardType.PRIMARY);
             })
         );
-    },
+    }
 
     _remove_keybindings() {
         Main.wm.removeKeybinding(PrefsKeys.OPEN_TRANSLATOR_KEY);
         Main.wm.removeKeybinding(PrefsKeys.TRANSLATE_FROM_CLIPBOARD_KEY)
         Main.wm.removeKeybinding(PrefsKeys.TRANSLATE_FROM_SELECTION_KEY);
-    },
+    }
 
     _add_panel_button() {
         if(!this._panel_button) {
             this._panel_button = new TranslatorPanelButton(this);
             Main.panel.addToStatusArea('text-translator', this._panel_button);
         }
-    },
+    }
 
     _remove_panel_button() {
         if(this._panel_button != false) {
             this._panel_button.destroy();
             this._panel_button = false;
         }
-    },
+    }
 
     open() {
         if(Utils.SETTINGS.get_boolean(PrefsKeys.REMEMBER_LAST_TRANSLATOR_KEY)) {
@@ -1000,7 +995,7 @@ const TranslatorExtension = new Lang.Class({
         if(this._panel_button) {
             this._panel_button.set_focus(true);
         }
-    },
+    }
 
     close() {
         if(this._panel_button) {
@@ -1008,7 +1003,7 @@ const TranslatorExtension = new Lang.Class({
         }
 
         this._dialog.close();
-    },
+    }
 
     enable() {
         if(Utils.SETTINGS.get_boolean(PrefsKeys.SHOW_ICON_KEY)) {
@@ -1041,7 +1036,7 @@ const TranslatorExtension = new Lang.Class({
                     else this._remove_keybindings();
                 })
             );
-    },
+    }
 
     disable() {
         this.close();
@@ -1062,16 +1057,16 @@ const TranslatorExtension = new Lang.Class({
         if(this._panel_button !== false) {
             this._remove_panel_button();
         }
-    },
+    }
 
     get current_target_lang() {
         return this._current_target_lang;
-    },
+    }
 
     get current_source_lang() {
         return this._current_source_lang;
     }
-});
+}
 
 let translator = null;
 

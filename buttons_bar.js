@@ -7,10 +7,9 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const Utils = Me.imports.utils;
 
-const ButtonsBarButton = new Lang.Class({
-    Name: 'ButtonsBarButton',
+const ButtonsBarButton = class {
 
-    _init(icon_name, label_text, tip_text, params, action) {
+    constructor(icon_name, label_text, tip_text, params, action) {
         this.params = Params.parse(params, {
             button_style_class: 'translator-button',
             box_style_class: 'translator-button-box',
@@ -85,7 +84,7 @@ const ButtonsBarButton = new Lang.Class({
         if(!this._icon && !this._label) {
             throw new Error('icon and label are both false');
         }
-    },
+    }
 
     _on_enter_event(object, event) {
         if(this.params.statusbar && !Utils.is_blank(this._tip_text)) {
@@ -104,7 +103,7 @@ const ButtonsBarButton = new Lang.Class({
                 transition: 'easeOutQuad'
             });
         }
-    },
+    }
 
     _on_leave_event(object, event) {
         if(this.params.statusbar && !Utils.is_blank(this._tip_text)) {
@@ -121,11 +120,11 @@ const ButtonsBarButton = new Lang.Class({
                 })
             });
         }
-    },
+    }
 
     connect(signal, callback) {
         this.button.connect(signal, callback);
-    },
+    }
 
     set_checked(checked) {
         if(checked) {
@@ -136,68 +135,67 @@ const ButtonsBarButton = new Lang.Class({
         }
 
         this.button.set_checked(checked);
-    },
+    }
 
     get_checked() {
         return this.button.get_checked();
-    },
+    }
 
     set_sensitive(sensitive) {
         this._sensitive = sensitive;
-    },
+    }
 
     destroy() {
         this.params = null;
         this._label_text = null;
         this._tip_text = null;
         this._button_box.destroy();
-    },
+    }
 
     get label_actor() {
         return this._label;
-    },
+    }
 
     get label() {
         return this._label.clutter_text.get_text();
-    },
+    }
 
     set label(text) {
         this._label.clutter_text.set_markup(text);
-    },
+    }
 
     get icon_actor() {
         return this._icon;
-    },
+    }
 
     get icon_name() {
         return this._icon.icon_name;
-    },
+    }
 
     set icon_name(name) {
         this._icon.icon_name;
-    },
+    }
 
     get has_icon() {
         return this._icon !== false ? true : false;
-    },
+    }
 
     get has_label() {
         return this._label !== false ? true : false;
-    },
+    }
 
     get button() {
         return this._button;
-    },
+    }
 
     get actor() {
         return this._button_box;
-    },
-});
+    }
+}
 
-const ButtonsBarLabel = new Lang.Class({
-    Name: 'ButtonsBarLabel',
+const ButtonsBarLabel = class {
 
-    _init(text, style_class) {
+    constructor(text, style_class) {
         this._label = new St.Label({
             style_class: style_class
         });
@@ -205,25 +203,24 @@ const ButtonsBarLabel = new Lang.Class({
 
         this.actor = new St.BoxLayout();
         this.actor.add(this._label);
-    },
+    }
 
     get label_actor() {
         return this._label;
-    },
+    }
 
     get label() {
         return this._label.clutter_text.get_text();
-    },
+    }
 
     set label(text) {
         this._label.clutter_text.set_markup(text);
-    },
-});
+    }
+}
 
-const ButtonsBar = new Lang.Class({
-    Name: 'ButtonsBar',
+const ButtonsBar = class {
 
-    _init(params) {
+    constructor(params) {
         this.params = Params.parse(params, {
             style_class: 'translator-buttons-bar-box'
         });
@@ -232,7 +229,7 @@ const ButtonsBar = new Lang.Class({
             style_class: this.params.style_class
         });
         this._buttons = [];
-    },
+    }
 
     add_button(button) {
         this._buttons.push(button);
@@ -240,16 +237,16 @@ const ButtonsBar = new Lang.Class({
             x_fill: false,
             x_align: St.Align.START
         });
-    },
+    }
 
     clear() {
         for(let i = 0; i < this._buttons.length; i++) {
             let button = this._buttons[i];
             button.destroy();
         }
-    },
+    }
 
     destroy() {
         this.actor.destroy();
     }
-});
+}

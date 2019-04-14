@@ -4,12 +4,10 @@ const TranslationProviderBase = Extension.imports.translation_provider_base;
 
 const ENGINE = 'Google'
 
-const Translator = new Lang.Class({
-    Name: ENGINE,
-    Extends: TranslationProviderBase.TranslationProviderBase,
+const Translator = class extends TranslationProviderBase.TranslationProviderBase {
 
-    _init() {
+    constructor() {
         this.engine = ENGINE
         this.parent(ENGINE+'.Translate');
-    },
-});
+    }
+}

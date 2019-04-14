@@ -12,11 +12,9 @@ const PrefsKeys = Me.imports.prefs_keys;
 
 const COLUMNS = 4;
 
-const LanguageChooser = new Lang.Class({
-    Name: 'LanguageChooser',
-    Extends: ModalDialog.ModalDialog,
+const LanguageChooser = class extends ModalDialog.ModalDialog {
 
-    _init(title, languages) {
+    constructor(title, languages) {
         this.parent({destroyOnClose: false});
 
         this._dialogLayout = 
@@ -101,7 +99,7 @@ const LanguageChooser = new Lang.Class({
         this.set_languages(languages);
 
         this.contentLayout.add_actor(this._table);
-    },
+    }
 
     _on_key_press_event(object, event) {
         let symbol = event.get_key_symbol();
@@ -120,7 +118,7 @@ const LanguageChooser = new Lang.Class({
                 this._search_entry.grab_key_focus();
             }
         }
-    },
+    }
 
     _update_list() {
         this._languages_table.destroy_all_children();
@@ -137,7 +135,7 @@ const LanguageChooser = new Lang.Class({
         }
 
         this.show_languages('', filtered);
-    },
+    }
 
     _get_close_button() {
         let icon = new St.Icon({
@@ -161,7 +159,7 @@ const LanguageChooser = new Lang.Class({
         button.add_actor(icon);
 
         return button;
-    },
+    }
 
     _get_button(lang_code, lang_name) {
         let button = new St.Button({
@@ -184,7 +182,7 @@ const LanguageChooser = new Lang.Class({
         button.lang_name = lang_name;
 
         return button;
-    },
+    }
 
     _resize() {
         let width_percents = Utils.SETTINGS.get_int(PrefsKeys.WIDTH_PERCENTS_KEY);
@@ -208,7 +206,7 @@ const LanguageChooser = new Lang.Class({
         );
         this._scroll.set_width(scroll_width);
         this._scroll.set_height(scroll_height);
-    },
+    }
 
     show_languages(selected_language_code, list) {
         let row = 0;
@@ -243,23 +241,23 @@ const LanguageChooser = new Lang.Class({
                 column++;
             }
         }
-    },
+    }
 
     set_languages(languages) {
         if(!languages) return;
         this._languages = languages;
-    },
+    }
 
     close() {
         this._languages_table.destroy_all_children();
         this._search_entry.set_text('');
         this._search_entry.hide();
         this.parent();
-    },
+    }
 
     open() {
         this._resize()
         this.parent()
-    },
-});
+    }
+}
 Signals.addSignalMethods(LanguageChooser.prototype);

@@ -6,10 +6,9 @@ const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const ButtonsBar = Me.imports.buttons_bar;
 
-const LanguagesButtons = new Lang.Class({
-    Name: 'LanguagesButtons',
+const LanguagesButtons = class {
 
-    _init(languages) {
+    constructor(languages) {
         this._langs = languages || [];
 
         this._box = new St.BoxLayout();
@@ -25,7 +24,7 @@ const LanguagesButtons = new Lang.Class({
         this._box.add_actor(this.buttons.actor);
 
         this._show_buttons();
-    },
+    }
 
     _show_buttons() {
         if(this._langs.length > 0) {
@@ -55,22 +54,22 @@ const LanguagesButtons = new Lang.Class({
         else {
             this._label.show();
         }
-    },
+    }
 
     reload() {
         this.buttons.clear();
         this._show_buttons();
-    },
+    }
 
     add_languages(new_langs) {
         this._langs = this._langs.concat(new_langs);
         this.reload();
-    },
+    }
 
     set_languages(new_langs) {
         this._langs = new_langs;
         this.reload();
-    },
+    }
 
     select(lang_code) {
         for(let i = 0; i < this._langs.length; i++) {
@@ -84,19 +83,19 @@ const LanguagesButtons = new Lang.Class({
                 lang.button.set_checked(false);
             }
         }
-    },
+    }
 
     destroy() {
         this._langs = null;
         this._box.destroy();
-    },
+    }
 
     get actor() {
         return this._box;
-    },
+    }
 
     get languages() {
         return this._langs;
     }
-});
+}
 Signals.addSignalMethods(LanguagesButtons.prototype);

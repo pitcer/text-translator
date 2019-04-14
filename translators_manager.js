@@ -10,17 +10,16 @@ const Utils = Me.imports.utils;
 const TranslationProviderBase =
     Me.imports.translation_provider_base.TranslationProviderBase;
 
-const TranslatorsManager = new Lang.Class({
-    Name: 'TranslatorsManager',
+const TranslatorsManager = class {
 
-    _init(extension_object) {
+    constructor(extension_object) {
         this._extension_object = extension_object;
         this._translators = this._load_translators();
         this._default = this.get_by_name(
             Utils.SETTINGS.get_string(PrefsKeys.DEFAULT_TRANSLATOR_KEY)
         );
         this._current = this._default;
-    },
+    }
 
     _load_translators() {
         let translators = [];
@@ -41,7 +40,7 @@ const TranslatorsManager = new Lang.Class({
         }
 
         return translators;
-    },
+    }
 
     get_by_name(name) {
         if(Utils.is_blank(name)) return false;
@@ -55,11 +54,11 @@ const TranslatorsManager = new Lang.Class({
         }
 
         return false;
-    },
+    }
 
     get current() {
         return this._current;
-    },
+    }
 
     set current(translator_object_or_name) {
         let name = translator_object_or_name;
@@ -78,7 +77,7 @@ const TranslatorsManager = new Lang.Class({
             PrefsKeys.LAST_TRANSLATOR_KEY,
             name
         );
-    },
+    }
 
     get last_used() {
         let name = Utils.SETTINGS.get_string(PrefsKeys.LAST_TRANSLATOR_KEY);
@@ -86,11 +85,11 @@ const TranslatorsManager = new Lang.Class({
         if(!translator) return false;
 
         return translator;
-    },
+    }
 
     get default() {
         return this._default;
-    },
+    }
 
     get translators_names() {
         let result = [];
@@ -100,19 +99,19 @@ const TranslatorsManager = new Lang.Class({
         }
 
         return result;
-    },
+    }
 
     get translators() {
         return this._translators;
-    },
+    }
 
     get num_translators() {
         return this._translators.length;
-    },
+    }
 
     destroy() {
         for(let i = 0; i < this._translators.length; i++) {
             this._translators[i].destroy();
         }
-    },
-});
+    }
+}

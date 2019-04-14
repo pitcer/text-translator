@@ -18,16 +18,15 @@ const MESSAGE_TYPES = {
 
 const MAX_MESSAGE_LENGTH = 60;
 
-const StatusBarMessage = new Lang.Class({
-    Name: 'StatusBarMessage',
+const StatusBarMessage = class {
 
-    _init(text, timeout, type, has_spinner) {
+    constructor(text, timeout, type, has_spinner) {
         this._text = text;
         this._markup = this._prepare_message(text, type);
         this._type = type || MESSAGE_TYPES.info;
         this._timeout = timeout || 0;
         this._has_spinner = has_spinner || false;
-    },
+    }
 
     _prepare_message(message, type) {
         message = message.trim();
@@ -51,33 +50,32 @@ const StatusBarMessage = new Lang.Class({
         }
 
         return message_markup;
-    },
+    }
 
     get text() {
         return this._text;
-    },
+    }
 
     get markup() {
         return this._markup;
-    },
+    }
 
     get type() {
         return this._type;
-    },
+    }
 
     get timeout() {
         return this._timeout;
-    },
+    }
 
     get has_spinner() {
         return this._has_spinner;
     }
-});
+}
 
-const StatusBar = new Lang.Class({
-    Name: 'StatusBar',
+const StatusBar = class {
 
-    _init(params) {
+    constructor(params) {
         this.actor = new St.BoxLayout({
             style_class: 'translator-statusbar-box',
             visible: false
@@ -95,19 +93,19 @@ const StatusBar = new Lang.Class({
         this.actor.add(this._message_label);
 
         this._messages = {};
-    },
+    }
 
     _get_max_id() {
         let max_id = Math.max.apply(Math, Object.keys(this._messages));
         let result = max_id > 0 ? max_id : 0;
         return result;
-    },
+    }
 
     _generate_id() {
         let max_id = this._get_max_id();
         let result = max_id > 0 ? (max_id + 1) : 1;
         return result;
-    },
+    }
 
     show_message(id) {
         let message = this._messages[id];
@@ -142,7 +140,7 @@ const StatusBar = new Lang.Class({
                 }
             })
         });
-    },
+    }
 
     hide_message(id) {
         if(this._message_label.visible != true) return;
@@ -158,7 +156,7 @@ const StatusBar = new Lang.Class({
                 this.actor.hide();
             })
         });
-    },
+    }
 
     add_message(message, timeout, type, has_spinner) {
         if(Utils.is_blank(message)) return false;
@@ -169,31 +167,31 @@ const StatusBar = new Lang.Class({
         this.show_message(id);
 
         return id;
-    },
+    }
 
     remove_message(id) {
         this.hide_message(id);
         delete this._messages[id];
         this.show_last();
-    },
+    }
 
     remove_last() {
         let max_id = this._get_max_id();
         if(max_id > 0) this.remove_message(max_id);
-    },
+    }
 
     show_last() {
         let max_id = this._get_max_id();
         if(max_id > 0) this.show_message(max_id);
-    },
+    }
 
     clear() {
         this.actor.hide();
         this._messages = {};
-    },
+    }
 
     destroy() {
         this.clear();
         this.actor.destroy();
     }
-});
+}

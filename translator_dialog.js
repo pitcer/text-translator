@@ -18,10 +18,9 @@ const PrefsKeys = Me.imports.prefs_keys;
 const Utils = Me.imports.utils;
 const GoogleTTS = Me.imports.google_tts;
 
-const EntryBase = new Lang.Class({
-    Name: 'EntryBase',
+const EntryBase = class {
 
-    _init(params) {
+    constructor(params) {
         this.params = Params.parse(params, {
             box_style: 'translator-text-box',
             entry_style: 'translator-entry'
@@ -81,7 +80,7 @@ const EntryBase = new Lang.Class({
         });
 
         this.scroll.add_actor(this._box);
-    },
+    }
 
     _on_key_press_event(o, e) {
         let symbol = e.get_key_symbol();
@@ -158,7 +157,7 @@ const EntryBase = new Lang.Class({
         }
 
         return false;
-    },
+    }
 
     destroy() {
         if(this._font_connection_id > 0) {
@@ -166,67 +165,65 @@ const EntryBase = new Lang.Class({
         }
 
         this.actor.destroy();
-    },
+    }
 
     grab_key_focus() {
         this._clutter_text.grab_key_focus();
-    },
+    }
 
     set_size(width, height) {
         this.scroll.set_width(width);
         this.scroll.set_height(height);
-    },
+    }
 
     set_font_size(size) {
         let style_string = "font-size: %spx".format(size);
         this.entry.set_style(style_string);
-    },
+    }
 
     get entry() {
         return this._entry;
-    },
+    }
 
     get clutter_text() {
         return this._clutter_text;
-    },
+    }
 
     get text() {
         return this._entry.get_text();
-    },
+    }
 
     set text(text) {
         this._entry.set_text(text);
-    },
+    }
 
     set markup(markup) {
         this._clutter_text.set_markup(markup);
-    },
+    }
 
     get length() {
         return this._entry.get_text().length;
-    },
+    }
 
     get is_empty() {
         return this._entry.get_text().length < 1;
-    },
+    }
 
     get max_length() {
         return this._clutter_text.get_max_length();
-    },
+    }
 
     set max_length(length) {
         length = parseInt(length, 10) || 0;
         this._clutter_text.set_max_length(length);
         this.emit('max-length-changed');
     }
-});
+}
 Signals.addSignalMethods(EntryBase.prototype);
 
-const SourceEntry = new Lang.Class({
-    Name: 'SourceEntry',
-    Extends: EntryBase,
+const SourceEntry = class extends EntryBase {
 
-    _init() {
+    constructor() {
         this.parent({
             entry_style: 'translator-entry',
             box_style: 'translator-source-text-box'
@@ -236,27 +233,24 @@ const SourceEntry = new Lang.Class({
         v_adjust.connect('changed', Lang.bind(this, function () {
             v_adjust.value = v_adjust.upper - v_adjust.page_size;
         }));
-    },
-});
+    }
+}
 
-const TargetEntry = new Lang.Class({
-    Name: 'TargetEntry',
-    Extends: EntryBase,
+const TargetEntry = class extends EntryBase {
 
-    _init() {
+    constructor() {
         this.parent({
             box_style: 'translator-target-text-box',
             entry_style: 'translator-entry'
         });
 
         this._clutter_text.set_editable(false);
-    },
-});
+    }
+}
 
-const ListenButton = new Lang.Class({
-    Name: 'ListenButton',
+const ListenButton = class {
 
-    _init() {
+    constructor() {
         this.actor = new St.Button({
             style_class: 'listen-button',
             x_expand: false,
@@ -272,26 +266,24 @@ const ListenButton = new Lang.Class({
         });
 
         this.actor.add_actor(this._icon);
-    },
+    }
 
     show() {
         this.actor.show();
-    },
+    }
 
     hide() {
         this.actor.hide();
-    },
+    }
 
     destroy() {
         this.actor.destroy();
     }
-});
+}
 
-const TranslatorDialog = new Lang.Class({
-    Name: 'TranslatorDialog',
-    Extends: ModalDialog.ModalDialog,
+const TranslatorDialog = class extends ModalDialog.ModalDialog {
 
-    _init(text_translator) {
+    constructor(text_translator) {
         this.parent({
             shellReactive: false,
             destroyOnClose: false
@@ -388,19 +380,19 @@ const TranslatorDialog = new Lang.Class({
 
         this._init_most_used_bar();
         this._init_scroll_sync();
-    },
+    }
 
     _on_source_changed() {
         this._chars_counter.current_length = this._source.length;
 
         if(!this._source.is_empty) this._listen_source_button.show();
         else this._listen_source_button.hide();
-    },
+    }
 
     _on_target_changed() {
         if(!this._target.is_empty) this._listen_target_button.show();
         else this._listen_target_button.hide();
-    },
+    }
 
     _init_scroll_sync() {
         if(Utils.SETTINGS.get_boolean(PrefsKeys.SYNC_ENTRIES_SCROLL_KEY)) {
@@ -417,7 +409,7 @@ const TranslatorDialog = new Lang.Class({
                 else this.unsync_entries_scroll();
             })
         );
-    },
+    }
 
     _init_most_used_bar() {
         if(Utils.SETTINGS.get_boolean(PrefsKeys.SHOW_MOST_USED_KEY)) {
@@ -434,7 +426,7 @@ const TranslatorDialog = new Lang.Class({
                 }
             })
         );
-    },
+    }
 
     _show_most_used_bar() {
         if(!this._most_used_bar) {
@@ -446,7 +438,7 @@ const TranslatorDialog = new Lang.Class({
         this._topbar.actor.set_style("padding-bottom: 0px;");
         this._grid_layout.attach(this._most_used_sources.actor, 0, 1, 1, 1);
         this._grid_layout.attach(this._most_used_targets.actor, 1, 1, 1, 1);
-    },
+    }
 
     _hide_most_used_bar() {
         if(this._most_used_bar) {
@@ -455,14 +447,14 @@ const TranslatorDialog = new Lang.Class({
             this._most_used_targets.destroy();
             this._most_used_bar = false;
         }
-    },
+    }
 
     _get_statusbar_height() {
         let message_id = this._statusbar.add_message('Sample message 1.');
         let result = this._statusbar.actor.get_preferred_height(-1)[1];
         this._statusbar.remove_message(message_id);
         return result;
-    },
+    }
 
     _resize() {
         let width_percents = Utils.SETTINGS.get_int(
@@ -505,7 +497,7 @@ const TranslatorDialog = new Lang.Class({
 
         this._source.set_size(text_box_width, text_box_height - 100);
         this._target.set_size(text_box_width, text_box_height - 100)
-    },
+    }
 
     sync_entries_scroll() {
         if(this._connection_ids.source_scroll < 1) {
@@ -544,7 +536,7 @@ const TranslatorDialog = new Lang.Class({
                 })
             );
         }
-    },
+    }
 
     unsync_entries_scroll() {
         if(this._connection_ids.source_scroll > 0) {
@@ -558,17 +550,17 @@ const TranslatorDialog = new Lang.Class({
             target_v_adjust.disconnect(this._connection_ids.target_scroll);
             this._connection_ids.target_scroll = 0;
         }
-    },
+    }
 
     open() {
         this.parent();
         this._resize();
-    },
+    }
 
     close() {
         this._statusbar.clear();
         this.parent();
-    },
+    }
 
     destroy() {
         if(this._connection_ids.sync_scroll_settings > 0) {
@@ -590,31 +582,31 @@ const TranslatorDialog = new Lang.Class({
         this._listen_target_button.destroy();
         this._google_tts.destroy();
         this.parent();
-    },
+    }
 
     get source() {
         return this._source;
-    },
+    }
 
     get target() {
         return this._target;
-    },
+    }
 
     get topbar() {
         return this._topbar;
-    },
+    }
 
     get dialog_menu() {
         return this._dialog_menu;
-    },
+    }
 
     get statusbar() {
         return this._statusbar;
-    },
+    }
 
     get dialog_layout() {
         return this._dialogLayout;
-    },
+    }
 
     get most_used() {
         let r = {
@@ -622,9 +614,9 @@ const TranslatorDialog = new Lang.Class({
             targets: this._most_used_targets
         };
         return r;
-    },
+    }
 
     get google_tts() {
         return this._google_tts;
     }
-});
+}

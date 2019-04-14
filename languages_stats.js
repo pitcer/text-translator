@@ -9,12 +9,11 @@ const Utils = Me.imports.utils;
 const TYPE_SOURCE = 'source';
 const TYPE_TARGET = 'target';
 
-const LanguagesStats = new Lang.Class({
-    Name: 'LanguagesStats',
+const LanguagesStats = class {
 
-    _init() {
+    constructor() {
         this._reload();
-    },
+    }
 
     _reload() {
         this._json_data = Utils.SETTINGS.get_string(
@@ -25,7 +24,7 @@ const LanguagesStats = new Lang.Class({
         if(this._storage instanceof Array) {
             this._storage = {};
         }
-    },
+    }
 
     increment(translator_name, type, lang_data) {
         let key_string = "%s-%s-%s".format(
@@ -47,7 +46,7 @@ const LanguagesStats = new Lang.Class({
         }
 
         this.save();
-    },
+    }
 
     get_n_most_used(translator_name, type, n) {
         n = n || 5;
@@ -72,7 +71,7 @@ const LanguagesStats = new Lang.Class({
         }
 
         return result.slice(0);
-    },
+    }
 
     save() {
         Utils.SETTINGS.set_string(
@@ -81,5 +80,5 @@ const LanguagesStats = new Lang.Class({
         )
         this.emit("stats-changed");
     }
-});
+}
 Signals.addSignalMethods(LanguagesStats.prototype);

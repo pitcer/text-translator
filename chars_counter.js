@@ -2,10 +2,9 @@ const St = imports.gi.St;
 const Lang = imports.lang;
 const Tweener = imports.ui.tweener;
 
-const CharsCounter = new Lang.Class({
-    Name: 'CharsCounter',
+const CharsCounter = class {
 
-    _init() {
+    constructor() {
         this.actor = new St.BoxLayout({
             style_class: 'translator-chars-counter-box',
             visible: false
@@ -32,7 +31,7 @@ const CharsCounter = new Lang.Class({
         this.actor.add_actor(this._current_length_label);
         this.actor.add_actor(this._separator_label);
         this.actor.add_actor(this._max_length_label);
-    },
+    }
 
     _show() {
         if(this.actor.visible) return;
@@ -45,7 +44,7 @@ const CharsCounter = new Lang.Class({
             transition: 'easeOutQuad',
             opacity: 255
         });
-    },
+    }
 
     _hide() {
         if(!this.actor.visible) return;
@@ -59,7 +58,7 @@ const CharsCounter = new Lang.Class({
                 this.actor.opacity = 255;
             })
         });
-    },
+    }
 
     _maybe_show() {
         if(this._max_length < 1 || this._current_length < 1) {
@@ -70,7 +69,7 @@ const CharsCounter = new Lang.Class({
         if(this.actor.visible) return;
 
         this._show();
-    },
+    }
 
     _current_length_changed() {
         this._maybe_show();
@@ -104,7 +103,7 @@ const CharsCounter = new Lang.Class({
         });
 
         clutter_text.set_markup(markup);
-    },
+    }
 
     _max_length_changed() {
         this._maybe_show();
@@ -128,27 +127,27 @@ const CharsCounter = new Lang.Class({
 
         clutter_text.set_markup(markup);
         this._current_length_changed();
-    },
+    }
 
     destroy() {
         this.actor.destroy();
-    },
+    }
 
     get current_length() {
         return this._current_length;
-    },
+    }
 
     set current_length(length) {
         this._current_length = length;
         this._current_length_changed();
-    },
+    }
 
     get max_length() {
         return this._max_length;
-    },
+    }
 
     set max_length(length) {
         this._max_length = length;
         this._max_length_changed();
     }
-});
+}

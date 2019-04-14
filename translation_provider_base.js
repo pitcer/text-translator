@@ -80,10 +80,9 @@ const LANGUAGES_LIST = {
     "zh-TW": "Chinese Traditional"
 };
 
-const TranslationProviderPrefs = new Lang.Class({
-    Name: "TranslationProviderPrefs",
+const TranslationProviderPrefs = class {
 
-    _init(provider_name) {
+    constructor(provider_name) {
         this._name = provider_name;
 
         this._settings_connect_id = Utils.SETTINGS.connect(
@@ -98,7 +97,7 @@ const TranslationProviderPrefs = new Lang.Class({
         this._remember_last_lang;
 
         this._load_prefs();
-    },
+    }
 
     _load_prefs() {
         let json_string = Utils.SETTINGS.get_string(
@@ -119,7 +118,7 @@ const TranslationProviderPrefs = new Lang.Class({
         this._last_source = prefs.last_source || "";
         this._last_target = prefs.last_target || "";
         this._remember_last_lang = prefs.remember_last_lang || false;
-    },
+    }
 
     save_prefs(new_prefs) {
         let json_string = Utils.SETTINGS.get_string(
@@ -142,65 +141,65 @@ const TranslationProviderPrefs = new Lang.Class({
             PrefsKeys.TRANSLATORS_PREFS_KEY,
             JSON.stringify(current_prefs)
         );
-    },
+    }
 
     destroy() {
         if(this._settings_connect_id > 0) {
             Utils.SETTINGS.disconnect(this._settings_connect_id);
         }
-    },
+    }
 
     get last_source() {
         return !Utils.is_blank(this._last_source)
         ? this._last_source
         : false;
-    },
+    }
 
     set last_source(lang_code) {
         this._last_source = lang_code;
         this.save_prefs({
             last_source: lang_code
         });
-    },
+    }
 
     get last_target() {
         return !Utils.is_blank(this._last_target) ?
         this._last_target
         : false;
-    },
+    }
 
     set last_target(lang_code) {
         this._last_target = lang_code;
         this.save_prefs({
             last_target: lang_code
         });
-    },
+    }
 
     get default_source() {
         return this._default_source;
-    },
+    }
 
     set default_source(lang_code) {
         this._default_source = lang_code;
         this.save_prefs({
             default_source: lang_code
         });
-    },
+    }
 
     get default_target() {
         return this._default_target
-    },
+    }
 
     set default_target(lang_code) {
         this._default_target = lang_code;
         this.save_prefs({
             default_target: lang_code
         });
-    },
+    }
 
     get remember_last_lang() {
         return this._remember_last_lang;
-    },
+    }
 
     set remember_last_lang(enable) {
         enable = enable === true ? true : false;
@@ -208,18 +207,17 @@ const TranslationProviderPrefs = new Lang.Class({
         this.save_prefs({
             remember_last_lang: enable
         });
-    },
-});
+    }
+}
 
-const TranslationProviderBase = new Lang.Class({
-    Name: 'Translate Shell',
+const TranslationProviderBase = class {
 
-    _init(name, limit, url) {
+    constructor(name, limit, url) {
         this._name = name;
         this._limit = limit;
         this._url = url;
         this.prefs = new TranslationProviderPrefs(this._name);
-    },
+    }
 
     _get_data_async(url, callback) {
         let request = Soup.Message.new('GET', url);
@@ -240,7 +238,7 @@ const TranslationProviderBase = new Lang.Class({
                 }
             }
         ));
-    },
+    }
 
     make_url(source_lang, target_lang, text) {
         let result = this._url.format(
@@ -249,24 +247,24 @@ const TranslationProviderBase = new Lang.Class({
             encodeURIComponent(text)
         );
         return result;
-    },
+    }
 
     get_languages() {
         return LANGUAGES_LIST;
-    },
+    }
 
     get_language_name(lang_code) {
         return LANGUAGES_LIST[lang_code] || false;
-    },
+    }
 
     get_pairs(language) {
         return LANGUAGES_LIST
         // throw new Error('Not implemented');
-    },
+    }
 
     parse_response(helper_source_data) {
         throw new Error('Not implemented');
-    },
+    }
 
 
     translate(source_lang, target_lang, text, callback) {
@@ -288,7 +286,7 @@ const TranslationProviderBase = new Lang.Class({
               : this._escape_translation(out))
             //   : command.join(' '))
         })
-    },
+    }
 
     _escape_translation(str) {
       if (!str) return ''
@@ -304,11 +302,11 @@ const TranslationProviderBase = new Lang.Class({
           str = this._replace_all(str, hex, stuff[hex]);
       }
       return str
-    },
+    }
 
     _replace_all(str, find, replace) {
       return (str || '').split(find).join(replace)
-    },
+    }
 
     _escape_html(str) {
       return (str || '')
@@ -317,7 +315,7 @@ const TranslationProviderBase = new Lang.Class({
           .replace(/'/g, '&#39;')
           .replace(/</g, '&lt;')
           .replace(/>/g, '&gt;');
-    },
+    }
 
     _exec(cmd, exec_cb) {
 
@@ -344,18 +342,18 @@ const TranslationProviderBase = new Lang.Class({
             }
         }
         out_reader.read_line_async(null,null, _SocketRead);
-    },
+    }
 
 
     get name() {
         return this._name;
-    },
+    }
 
     get limit() {
         return this._limit;
-    },
+    }
 
     destroy() {
         this.prefs.destroy();
-    },
-});
+    }
+}

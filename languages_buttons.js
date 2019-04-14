@@ -26,31 +26,24 @@ var LanguagesButtons = class LanguagesButtons {
     }
 
     _show_buttons() {
-        if(this._langs.length > 0) {
+        if (this._langs.length > 0) {
             this._label.hide();
             this.buttons.actor.show();
 
-            for(let i = 0; i < this._langs.length; i++) {
-                let button_params = {
-                    button_style_class: 'translator-lang-button',
-                    box_style_class: 'translator-lang-button-box',
-                    toggle_mode: true
-                }
-                let button = new ButtonsBar.ButtonsBarButton(
-                    false,
-                    this._langs[i].lang_name,
-                    '',
-                    button_params
-                );
-                this._langs[i].button = button;
-                let lang_data = this._langs[i];
+            let button_params = {
+                button_style_class: 'translator-lang-button',
+                box_style_class: 'translator-lang-button-box',
+                toggle_mode: true
+            }
+            for (let lang of this._langs) {
+                let button = new ButtonsBar.ButtonsBarButton(false, lang.lang_name, '', button_params);
+                lang.button = button;
                 button.connect("clicked", () => {
-                    this.emit("clicked", lang_data);
+                    this.emit("clicked", lang);
                 });
                 this.buttons.add_button(button);
             }
-        }
-        else {
+        } else {
             this._label.show();
         }
     }
@@ -71,14 +64,11 @@ var LanguagesButtons = class LanguagesButtons {
     }
 
     select(lang_code) {
-        for(let i = 0; i < this._langs.length; i++) {
-            let lang = this._langs[i];
-
-            if(lang.lang_code === lang_code) {
+        for (let lang of this._langs) {
+            if (lang.lang_code === lang_code) {
                 lang.button.set_checked(true);
                 this.emit("selected", lang);
-            }
-            else {
+            } else {
                 lang.button.set_checked(false);
             }
         }

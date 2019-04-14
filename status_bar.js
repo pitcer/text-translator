@@ -34,7 +34,7 @@ const StatusBarMessage = class StatusBarMessage {
 
         let message_markup = '<span color="%s">%s</span>';
 
-        switch(type) {
+        switch (type) {
             case MESSAGE_TYPES.error:
                 message_markup = message_markup.format('red', message);
                 break;
@@ -83,10 +83,7 @@ var StatusBar = class StatusBar {
         this._message_label.get_clutter_text().use_markup = true;
 
         let spinner_icon = Gio.File.new_for_uri('resource:///org/gnome/shell/theme/process-working.svg');
-        this._spinner = new Animation.AnimatedIcon(
-            spinner_icon,
-            16
-        );
+        this._spinner = new Animation.AnimatedIcon(spinner_icon, 16);
 
         this.actor.add(this._spinner.actor);
         this.actor.add(this._message_label);
@@ -108,18 +105,19 @@ var StatusBar = class StatusBar {
 
     show_message(id) {
         let message = this._messages[id];
-        if(message === undefined || !message instanceof StatusBarMessage) return;
+        if (message === undefined || !message instanceof StatusBarMessage) {
+            return;
+        }
 
         this._message_label.get_clutter_text().set_markup(message.markup);
 
         this.actor.opacity = 0;
         this.actor.show();
 
-        if(message.has_spinner) {
+        if (message.has_spinner) {
             this._spinner.actor.show();
             this._spinner.play();
-        }
-        else {
+        } else {
             this._spinner.actor.hide();
         }
 
@@ -130,22 +128,24 @@ var StatusBar = class StatusBar {
             onComplete: () => {
                 let timeout = parseInt(message.timeout, 10);
 
-                if(timeout > 0) {
-                    Mainloop.timeout_add(message.timeout,
-                        () => {
-                            this.remove_message(id);
-                        }
-                    );
+                if (timeout > 0) {
+                    Mainloop.timeout_add(message.timeout, () => {
+                        this.remove_message(id);
+                    });
                 }
             }
         });
     }
 
     hide_message(id) {
-        if(this._message_label.visible != true) return;
+        if (this._message_label.visible != true) {
+            return;
+        }
 
         let message = this._messages[id];
-        if(message === undefined || !message instanceof StatusBarMessage) return;
+        if (message === undefined || !message instanceof StatusBarMessage) {
+            return;
+        }
 
         Tweener.addTween(this.actor, {
             time: 0.3,
@@ -158,7 +158,9 @@ var StatusBar = class StatusBar {
     }
 
     add_message(message, timeout, type, has_spinner) {
-        if(Utils.is_blank(message)) return false;
+        if (Utils.is_blank(message)) {
+            return false;
+        }
         message = new StatusBarMessage(message, timeout, type, has_spinner);
 
         let id = this._generate_id();
@@ -176,12 +178,12 @@ var StatusBar = class StatusBar {
 
     remove_last() {
         let max_id = this._get_max_id();
-        if(max_id > 0) this.remove_message(max_id);
+        if (max_id > 0) this.remove_message(max_id);
     }
 
     show_last() {
         let max_id = this._get_max_id();
-        if(max_id > 0) this.show_message(max_id);
+        if (max_id > 0) this.show_message(max_id);
     }
 
     clear() {

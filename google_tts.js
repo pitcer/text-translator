@@ -14,8 +14,12 @@ var GoogleTTS = class GoogleTTS {
         this._bus = this._player.get_bus();
         this._bus.add_signal_watch();
 
-        this._bus.connect("message::error", () => { this._kill_stream(); });
-        this._bus.connect("message::eos", () => { this._kill_stream(); });
+        this._bus.connect("message::error", () => {
+            this._kill_stream();
+        });
+        this._bus.connect("message::eos", () => {
+            this._kill_stream();
+        });
     }
 
     _kill_stream() {

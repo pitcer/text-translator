@@ -7,7 +7,8 @@
     /*border: 1px solid #111;*/
 }
 
-.translator-source-text-box, .translator-target-text-box {
+.translator-source-text-box,
+.translator-target-text-box {
     /*background: #0f0;*/
     /*border: 1px solid #333;*/
     overflow: hidden;
@@ -15,6 +16,7 @@
     /*padding: 30px;*/
     /*border-radius: 3px;*/
 }
+
 /*.translator-source-text-box { margin-right: 10px }
 .translator-target-text-box { margin-left: 10px }*/
 
@@ -34,22 +36,22 @@
     color: #ff0;
 }
 
-.translator-buttons-bar-box {
-}
+.translator-buttons-bar-box {}
 
 .translator-buttons-bar-icon {
     icon-size: 14px;
     margin: 4px;
 }
+
 .translator-buttons-bar-icon:hover {
     /*color: #0af;*/
 }
+
 .translator-buttons-bar-icon:active {
     /*color: #f00;*/
 }
 
-.translator-top-bar-box {
-}
+.translator-top-bar-box {}
 
 .tranlator-top-bar-button {
     /*font-size: 23px;*/
@@ -209,8 +211,7 @@
     /*color: #fff;*/
 }
 
-.translator-lang-button:hover {
-}
+.translator-lang-button:hover {}
 
 .translator-lang-button:active {
     /*color: #0af;*/
@@ -226,5 +227,4 @@
     /*text-shadow: 0 0 10px #fff;*/
 }
 
-.listen-button:active {
-}
+.listen-button:active {}

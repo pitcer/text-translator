@@ -13,10 +13,7 @@ const HelpDialog = class HelpDialog extends ModalDialog.ModalDialog {
     constructor() {
         super();
 
-        this._dialogLayout =
-            typeof this.dialogLayout === "undefined"
-            ? this._dialogLayout
-            : this.dialogLayout;
+        this._dialogLayout = typeof this.dialogLayout === "undefined" ? this._dialogLayout : this.dialogLayout;
         this._dialogLayout.connect('key-press-event', (object, event) => {
             this._on_key_press_event(object, event);
         });
@@ -30,12 +27,11 @@ const HelpDialog = class HelpDialog extends ModalDialog.ModalDialog {
         let markup =
             "<span size='x-large'>Shortcuts:</span>\n" +
             "<b>&lt;Super&gt;T</b> - open translator dialog.\n" +
-            "<b>&lt;Super&gt;&lt;Shift&gt;T</b> - open translator dialog and " +
-            "translate text from clipboard.\n" +
-            "<b>&lt;Super&gt;&lt;Alt&gt;T</b> - open translator dialog and translate " +
-            "from primary selection.\n<b>&lt;Ctrl&gt;&lt;Enter&gt;</b> - " +
-            "Translate text.\n<b>&lt;Ctrl&gt;&lt;Shift&gt;C</b> - copy translated " +
-            "text to clipboard.\n<b>&lt;Ctrl&gt;S</b> - swap languages.\n" +
+            "<b>&lt;Super&gt;&lt;Shift&gt;T</b> - open translator dialog and translate text from clipboard.\n" +
+            "<b>&lt;Super&gt;&lt;Alt&gt;T</b> - open translator dialog and translate from primary selection.\n" +
+            "<b>&lt;Ctrl&gt;&lt;Enter&gt;</b> - Translate text.\n" +
+            "<b>&lt;Ctrl&gt;&lt;Shift&gt;C</b> - copy translated text to clipboard.\n" +
+            "<b>&lt;Ctrl&gt;S</b> - swap languages.\n" +
             "<b>&lt;Ctrl&gt;D</b> - reset languages to default.\n" +
             "<b>&lt;Tab&gt;</b> - toggle transliteration of result text.\n" +
             "<b>&lt;Escape&gt;</b> - close dialog";
@@ -60,7 +56,7 @@ const HelpDialog = class HelpDialog extends ModalDialog.ModalDialog {
     _on_key_press_event(object, event) {
         let symbol = event.get_key_symbol();
 
-        if(symbol == Clutter.Escape) {
+        if (symbol == Clutter.Escape) {
             this.close();
         }
     }

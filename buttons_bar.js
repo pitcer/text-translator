@@ -34,9 +34,11 @@ var ButtonsBarButton = class ButtonsBarButton {
         this._button.add_actor(this._button_content);
         this._button_box.add_actor(this._button);
 
-        if(typeof(action) == 'function') {
+        if (typeof (action) == 'function') {
             this._button.connect('clicked', () => {
-                if(this._sensitive) action();
+                if (this._sensitive) {
+                    action();
+                }
             });
         }
 
@@ -45,7 +47,7 @@ var ButtonsBarButton = class ButtonsBarButton {
         this._label_text = label_text;
         this._tip_text = tip_text;
 
-        if(!Utils.is_blank(icon_name)) {
+        if (!Utils.is_blank(icon_name)) {
             this._icon = new St.Icon({
                 icon_name: icon_name,
                 style_class: this.params.icon_style
@@ -57,7 +59,7 @@ var ButtonsBarButton = class ButtonsBarButton {
             });
         }
 
-        if(!Utils.is_blank(this._label_text)) {
+        if (!Utils.is_blank(this._label_text)) {
             this._label = new St.Label();
             this._label.clutter_text.set_markup(this._label_text);
 
@@ -66,33 +68,29 @@ var ButtonsBarButton = class ButtonsBarButton {
                 y_align: St.Align.MIDDLE
             });
 
-            if(this._icon) {
+            if (this._icon) {
                 this._label.visible = false;
             }
         }
 
-        this._button.connect(
-            'enter-event',
-            (object, event) => { this._on_enter_event(object, event); }
-        );
-        this._button.connect(
-            'leave-event',
-            (object, event) => { this._on_leave_event(object, event); }
-        );
+        this._button.connect('enter-event', (object, event) => {
+            this._on_enter_event(object, event);
+        });
+        this._button.connect('leave-event', (object, event) => {
+            this._on_leave_event(object, event);
+        });
 
-        if(!this._icon && !this._label) {
+        if (!this._icon && !this._label) {
             throw new Error('icon and label are both false');
         }
     }
 
     _on_enter_event(object, event) {
-        if(this.params.statusbar && !Utils.is_blank(this._tip_text)) {
-            this._statusbar_message_id = this.params.statusbar.add_message(
-                this._tip_text
-            );
+        if (this.params.statusbar && !Utils.is_blank(this._tip_text)) {
+            this._statusbar_message_id = this.params.statusbar.add_message(this._tip_text);
         }
 
-        if(this._icon && this._label) {
+        if (this._icon && this._label) {
             this._label.opacity = 0;
             this._label.show();
 
@@ -105,11 +103,11 @@ var ButtonsBarButton = class ButtonsBarButton {
     }
 
     _on_leave_event(object, event) {
-        if(this.params.statusbar && !Utils.is_blank(this._tip_text)) {
+        if (this.params.statusbar && !Utils.is_blank(this._tip_text)) {
             this.params.statusbar.remove_message(this._statusbar_message_id);
         }
 
-        if(this._icon && this._label) {
+        if (this._icon && this._label) {
             Tweener.addTween(this._label, {
                 time: 0.3,
                 opacity: 0,
@@ -126,10 +124,9 @@ var ButtonsBarButton = class ButtonsBarButton {
     }
 
     set_checked(checked) {
-        if(checked) {
+        if (checked) {
             this.button.add_style_pseudo_class('active');
-        }
-        else {
+        } else {
             this.button.remove_style_pseudo_class('active');
         }
 

@@ -84,10 +84,9 @@ const TranslationProviderPrefs = class TranslationProviderPrefs {
     constructor(provider_name) {
         this._name = provider_name;
 
-        this._settings_connect_id = Utils.SETTINGS.connect(
-            'changed::'+PrefsKeys.TRANSLATORS_PREFS_KEY,
-            () => { this._load_prefs(); }
-        );
+        this._settings_connect_id = Utils.SETTINGS.connect('changed::' + PrefsKeys.TRANSLATORS_PREFS_KEY, () => {
+            this._load_prefs();
+        });
 
         this._last_source = "";
         this._last_target = "";
@@ -99,16 +98,15 @@ const TranslationProviderPrefs = class TranslationProviderPrefs {
     }
 
     _load_prefs() {
-        let json_string = Utils.SETTINGS.get_string(
-            PrefsKeys.TRANSLATORS_PREFS_KEY
-        );
+        let json_string = Utils.SETTINGS.get_string(PrefsKeys.TRANSLATORS_PREFS_KEY);
         let prefs = {};
         prefs[this._name] = {}
-        try { prefs = JSON.parse(json_string); } catch(e) {}
+        try {
+            prefs = JSON.parse(json_string);
+        } catch (e) {}
 
-        if(prefs[this._name] === undefined) {
+        if (prefs[this._name] === undefined) {
             throw new Error("Can't load prefs for %s".format(this._name));
-            return;
         }
 
         prefs = prefs[this._name];
@@ -120,38 +118,31 @@ const TranslationProviderPrefs = class TranslationProviderPrefs {
     }
 
     save_prefs(new_prefs) {
-        let json_string = Utils.SETTINGS.get_string(
-            PrefsKeys.TRANSLATORS_PREFS_KEY
-        );
+        let json_string = Utils.SETTINGS.get_string(PrefsKeys.TRANSLATORS_PREFS_KEY);
         let current_prefs = JSON.parse(json_string);
         let temp = {};
 
-        if(current_prefs[this._name] != undefined) {
+        if (current_prefs[this._name] != undefined) {
             temp = current_prefs[this._name];
         }
 
-        for(let key in new_prefs) {
+        for (let key in new_prefs) {
             temp[key] = new_prefs[key];
         }
 
         current_prefs[this._name] = temp;
 
-        Utils.SETTINGS.set_string(
-            PrefsKeys.TRANSLATORS_PREFS_KEY,
-            JSON.stringify(current_prefs)
-        );
+        Utils.SETTINGS.set_string(PrefsKeys.TRANSLATORS_PREFS_KEY, JSON.stringify(current_prefs));
     }
 
     destroy() {
-        if(this._settings_connect_id > 0) {
+        if (this._settings_connect_id > 0) {
             Utils.SETTINGS.disconnect(this._settings_connect_id);
         }
     }
 
     get last_source() {
-        return !Utils.is_blank(this._last_source)
-        ? this._last_source
-        : false;
+        return !Utils.is_blank(this._last_source) ? this._last_source : false;
     }
 
     set last_source(lang_code) {
@@ -162,9 +153,7 @@ const TranslationProviderPrefs = class TranslationProviderPrefs {
     }
 
     get last_target() {
-        return !Utils.is_blank(this._last_target) ?
-        this._last_target
-        : false;
+        return !Utils.is_blank(this._last_target) ? this._last_target : false;
     }
 
     set last_target(lang_code) {
@@ -222,16 +211,14 @@ var TranslationProviderBase = class TranslationProviderBase {
         let request = Soup.Message.new('GET', url);
 
         _httpSession.queue_message(request, (_httpSession, message) => {
-            if(message.status_code === 200) {
+            if (message.status_code === 200) {
                 try {
                     callback(request.response_body.data);
-                }
-                catch(e) {
-                    log('Error: '+e);
+                } catch (e) {
+                    log('Error: ' + e);
                     callback('');
                 }
-            }
-            else {
+            } else {
                 callback('');
             }
         });
@@ -255,14 +242,12 @@ var TranslationProviderBase = class TranslationProviderBase {
     }
 
     get_pairs(language) {
-        return LANGUAGES_LIST
-        // throw new Error('Not implemented');
+        return LANGUAGES_LIST;
     }
 
     parse_response(helper_source_data) {
         throw new Error('Not implemented');
     }
-
 
     translate(source_lang, target_lang, text, callback) {
         let command = [
@@ -272,73 +257,76 @@ var TranslationProviderBase = class TranslationProviderBase {
             '--show-languages', 'n',
             '--show-prompt-message', 'n',
             '--no-bidi',
-            source_lang+':'+target_lang,
+            source_lang + ':' + target_lang,
             text
         ];
 
 
         this._exec(command, (out, err) => {
-          callback(err
-              ? this._escape_html('Please make sure both gawk and translate-shell are installed. Error: '+err)
-              : this._escape_translation(out))
-            //   : command.join(' '))
-        })
+            callback(err ? this._escape_html('Please make sure both gawk and translate-shell are installed. Error: ' + err) : this._escape_translation(out));
+        });
     }
 
     _escape_translation(str) {
-      if (!str) return ''
+        if (!str) {
+            return '';
+        }
 
-      let stuff = {
-          "\x1B[1m" : '<b>',
-          "\x1B[22m" : '</b>',
-          "\x1B[4m" : '<u>',
-          "\x1B[24m" : '</u>'
-      }
-      str = this._escape_html(str)
-      for (let hex in stuff) {
-          str = this._replace_all(str, hex, stuff[hex]);
-      }
-      return str
+        let stuff = {
+            "\x1B[1m": '<b>',
+            "\x1B[22m": '</b>',
+            "\x1B[4m": '<u>',
+            "\x1B[24m": '</u>'
+        };
+        str = this._escape_html(str);
+        for (let hex in stuff) {
+            str = this._replace_all(str, hex, stuff[hex]);
+        }
+        return str;
     }
 
     _replace_all(str, find, replace) {
-      return (str || '').split(find).join(replace)
+        return (str || '')
+            .split(find)
+            .join(replace);
     }
 
     _escape_html(str) {
-      return (str || '')
-          .replace(/&/g, '&amp;')
-          .replace(/"/g, '&quot;')
-          .replace(/'/g, '&#39;')
-          .replace(/</g, '&lt;')
-          .replace(/>/g, '&gt;');
+        return (str || '')
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
     }
 
     _exec(cmd, exec_cb) {
 
         try {
-        var [res, pid, in_fd, out_fd, err_fd] = GLib.spawn_async_with_pipes(null, cmd, null, GLib.SpawnFlags.SEARCH_PATH, null);
+            var [res, pid, in_fd, out_fd, err_fd] = GLib.spawn_async_with_pipes(null, cmd, null, GLib.SpawnFlags.SEARCH_PATH, null);
             var out_reader = new Gio.DataInputStream({
-                base_stream: new Gio.UnixInputStream({fd: out_fd})
+                base_stream: new Gio.UnixInputStream({
+                    fd: out_fd
+                })
             });
-        } catch(e) {
+        } catch (e) {
             exec_cb && exec_cb(null, e);
             return;
         }
 
 
         let output = '';
+
         function _SocketRead(source_object, res) {
             const [chunk, length] = out_reader.read_upto_finish(res);
             if (chunk !== null) {
-                output+= chunk+'\n'
-                // output+= ".,"+chunk+",."+ (typeof chunk)+'||'+length+'\n';
-                out_reader.read_line_async(null,null, _SocketRead);
+                output += chunk + '\n';
+                out_reader.read_line_async(null, null, _SocketRead);
             } else {
                 exec_cb && exec_cb(output);
             }
         }
-        out_reader.read_line_async(null,null, _SocketRead);
+        out_reader.read_line_async(null, null, _SocketRead);
     }
 
 

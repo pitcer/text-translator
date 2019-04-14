@@ -14,12 +14,11 @@ const COLUMNS = 4;
 var LanguageChooser = class LanguageChooser extends ModalDialog.ModalDialog {
 
     constructor(title, languages) {
-        super({destroyOnClose: false});
+        super({
+            destroyOnClose: false
+        });
 
-        this._dialogLayout =
-            typeof this.dialogLayout === "undefined"
-            ? this._dialogLayout
-            : this.dialogLayout;
+        this._dialogLayout = typeof this.dialogLayout === "undefined" ? this._dialogLayout : this.dialogLayout;
         this._dialogLayout.connect('key-press-event', (object, event) => {
             this._on_key_press_event(object, event);
         });
@@ -55,24 +54,22 @@ var LanguageChooser = class LanguageChooser extends ModalDialog.ModalDialog {
             x_expand: false,
             y_expand: false
         });
-        this._search_entry.connect('key-press-event',(o, e) => {
-            let symbol = e.get_key_symbol();
+        this._search_entry.connect('key-press-event', (object, event) => {
+            let symbol = event.get_key_symbol();
 
-            if(symbol == Clutter.Escape) {
+            if (symbol == Clutter.Escape) {
                 this._search_entry.set_text('');
                 this._search_entry.hide();
                 this._scroll.grab_key_focus();
                 this._info_label.show();
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         });
-        this._search_entry.clutter_text.connect(
-            'text-changed',
-            () => { this._update_list(); }
-        );
+        this._search_entry.clutter_text.connect('text-changed', () => {
+            this._update_list();
+        });
 
         this._info_label = new St.Label({
             text: '<span color="black"><i>Type to search...</i></span>',
@@ -103,14 +100,12 @@ var LanguageChooser = class LanguageChooser extends ModalDialog.ModalDialog {
     _on_key_press_event(object, event) {
         let symbol = event.get_key_symbol();
 
-        if(symbol == Clutter.Escape) {
+        if (symbol == Clutter.Escape) {
             this.close();
-        }
-        else {
+        } else {
             let ch = Utils.get_unichar(symbol);
 
-            if(ch) {
-                // log(ch);
+            if (ch) {
                 this._info_label.hide();
                 this._search_entry.set_text(ch);
                 this._search_entry.show();
@@ -123,12 +118,14 @@ var LanguageChooser = class LanguageChooser extends ModalDialog.ModalDialog {
         this._languages_table.destroy_all_children();
         let filtered = {};
 
-        for(let key in this._languages) {
+        for (let key in this._languages) {
             let lang_name = this._languages[key];
             let lang_code = key;
             let search_text = this._search_entry.get_text().toLowerCase();
 
-            if(!Utils.starts_with(lang_name.toLowerCase(), search_text)) continue;
+            if (!Utils.starts_with(lang_name.toLowerCase(), search_text)) {
+                continue;
+            }
 
             filtered[lang_code] = lang_name;
         }
@@ -197,12 +194,7 @@ var LanguageChooser = class LanguageChooser extends ModalDialog.ModalDialog {
         this._dialogLayout.set_height(chooser_height);
 
         let scroll_width = Math.round(chooser_width * 0.9);
-        let scroll_height = Math.round(
-            chooser_height
-            - this._title.height
-            - this._info_label.height
-            - this._dialogLayout.get_theme_node().get_padding(St.Side.BOTTOM) * 3
-        );
+        let scroll_height = Math.round(chooser_height - this._title.height - this._info_label.height - this._dialogLayout.get_theme_node().get_padding(St.Side.BOTTOM) * 3);
         this._scroll.set_width(scroll_width);
         this._scroll.set_height(scroll_height);
     }
@@ -212,11 +204,15 @@ var LanguageChooser = class LanguageChooser extends ModalDialog.ModalDialog {
         let column = 0;
         let languages = this._languages;
 
-        if(!Utils.is_blank(list)) languages = list;
+        if (!Utils.is_blank(list)) {
+            languages = list;
+        }
 
         let keys = Object.keys(languages);
         keys.sort((a, b) => {
-            if(a === 'auto') return false;
+            if (a === 'auto') {
+                return false;
+            }
             a = languages[a];
             b = languages[b];
             return a > b;
@@ -225,25 +221,26 @@ var LanguageChooser = class LanguageChooser extends ModalDialog.ModalDialog {
         for (let code of keys) {
             let button = this._get_button(code, languages[code]);
 
-            if(button.lang_code === selected_language_code) {
+            if (button.lang_code === selected_language_code) {
                 button.add_style_pseudo_class('active');
                 button.set_reactive(false);
             }
 
             this._languages_grid_layout.attach(button, column, row, 1, 1);
 
-            if(column === (COLUMNS - 1)) {
+            if (column === (COLUMNS - 1)) {
                 column = 0;
                 row++
-            }
-            else {
+            } else {
                 column++;
             }
         }
     }
 
     set_languages(languages) {
-        if(!languages) return;
+        if (!languages) {
+            return;
+        }
         this._languages = languages;
     }
 

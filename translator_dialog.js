@@ -36,11 +36,9 @@ const EntryBase = class EntryBase {
             x_align: St.Align.END,
             y_align: St.Align.MIDDLE
         });
-        this.actor.connect('button-press-event',
-            () => {
-                this._clutter_text.grab_key_focus();
-            }
-        );
+        this.actor.connect('button-press-event', () => {
+            this._clutter_text.grab_key_focus();
+        });
         this.actor.add(this.scroll, {
             x_fill: true,
             y_fill: true,
@@ -63,12 +61,9 @@ const EntryBase = class EntryBase {
         });
         this.set_font_size(Utils.SETTINGS.get_int(PrefsKeys.FONT_SIZE_KEY));
 
-        this._font_connection_id = Utils.SETTINGS.connect(
-            "changed::" + PrefsKeys.FONT_SIZE_KEY,
-            () => {
-                this.set_font_size(Utils.SETTINGS.get_int(PrefsKeys.FONT_SIZE_KEY));
-            }
-        );
+        this._font_connection_id = Utils.SETTINGS.connect("changed::" + PrefsKeys.FONT_SIZE_KEY, () => {
+            this.set_font_size(Utils.SETTINGS.get_int(PrefsKeys.FONT_SIZE_KEY));
+        });
 
         this._box = new St.BoxLayout({
             vertical: true
@@ -89,77 +84,60 @@ const EntryBase = class EntryBase {
         let cyrillic_control = 8196;
         let cyrillic_shift = 8192;
 
-        let control_mask =
-            // state === Clutter.ModifierType.CONTROL_MASK ||
-            state === cyrillic_control;
-        let shift_mask =
-            // state === Clutter.ModifierType.SHIFT_MASK ||
-            state === cyrillic_shift;
+        let control_mask = state === cyrillic_control;
+        let shift_mask = state === cyrillic_shift;
 
-        if(symbol == Clutter.Right) {
+        if (symbol == Clutter.Right) {
             let sel = this._clutter_text.get_selection_bound();
 
-            if(sel === -1) {
-               this._clutter_text.set_cursor_position(
-                    this._clutter_text.text.length
-                );
+            if (sel === -1) {
+                this._clutter_text.set_cursor_position(this._clutter_text.text.length);
             }
 
             return false;
         }
         // cyrillic Ctrl+A
-        else if(control_mask && code == 38) {
+        else if (control_mask && code == 38) {
             this._clutter_text.set_selection(0, this._clutter_text.text.length);
             return true;
         }
         // cyrillic Ctrl+C
-        else if(control_mask && code == 54) {
+        else if (control_mask && code == 54) {
             let clipboard = St.Clipboard.get_default();
             let selection = this._clutter_text.get_selection();
             let text;
 
-            if(!Utils.is_blank(selection)) text = selection;
-            else text = this._clutter_text.text;
+            if (!Utils.is_blank(selection)) {
+                text = selection;
+            } else {
+                text = this._clutter_text.text;
+            }
 
             clipboard.set_text(text);
             return true;
         }
         // cyrillic Ctrl+V
-        else if(control_mask && code == 55) {
+        else if (control_mask && code == 55) {
             let clipboard = St.Clipboard.get_default();
             clipboard.get_text((clipboard, text) => {
-                if(!Utils.is_blank(text)) {
+                if (!Utils.is_blank(text)) {
                     this._clutter_text.delete_selection();
-                    this._clutter_text.set_text(
-                        this._clutter_text.text + text
-                    );
+                    this._clutter_text.set_text(this._clutter_text.text + text);
                     return true;
                 }
 
                 return false;
             });
-        }
-        else if(
-            (state == Clutter.ModifierType.CONTROL_MASK || state == cyrillic_control) &&
-            (symbol == Clutter.Return || symbol == Clutter.KP_Enter)
-        ) {
+        } else if ((state == Clutter.ModifierType.CONTROL_MASK || state == cyrillic_control) && (symbol == Clutter.Return || symbol == Clutter.KP_Enter)) {
             this.emit('activate');
-            return Clutter.EVENT_STOP
-        }
-        else {
-            // let t = {
-            //     state: state,
-            //     symbol: symbol,
-            //     code: code
-            // };
-            // log(JSON.stringify(t, null, '\t'));
+            return Clutter.EVENT_STOP;
         }
 
         return false;
     }
 
     destroy() {
-        if(this._font_connection_id > 0) {
+        if (this._font_connection_id > 0) {
             Utils.SETTINGS.disconnect(this._font_connection_id);
         }
 
@@ -290,27 +268,20 @@ var TranslatorDialog = class TranslatorDialog extends ModalDialog.ModalDialog {
 
         this._text_translator = text_translator;
 
-        this._dialogLayout =
-            typeof this.dialogLayout === "undefined"
-            ? this._dialogLayout
-            : this.dialogLayout;
+        this._dialogLayout = typeof this.dialogLayout === "undefined" ? this._dialogLayout : this.dialogLayout;
         this._dialogLayout.set_style_class_name('translator-box');
 
         this._source = new SourceEntry();
-        this._source.clutter_text.connect(
-            'text-changed',
-            () => { this._on_source_changed(); }
-        );
-        this._source.connect('max-length-changed',
-            () => {
-                this._chars_counter.max_length = this._source.max_length;
-            }
-        );
+        this._source.clutter_text.connect('text-changed', () => {
+            this._on_source_changed();
+        });
+        this._source.connect('max-length-changed', () => {
+            this._chars_counter.max_length = this._source.max_length;
+        });
         this._target = new TargetEntry();
-        this._target.clutter_text.connect(
-            'text-changed',
-            () => { this._on_target_changed(); }
-        );
+        this._target.clutter_text.connect('text-changed', () => {
+            this._on_target_changed();
+        });
 
         this._connection_ids = {
             source_scroll: 0,
@@ -336,29 +307,22 @@ var TranslatorDialog = class TranslatorDialog extends ModalDialog.ModalDialog {
         this._most_used_bar = false;
 
         this._chars_counter = new CharsCounter.CharsCounter();
-        // this._chars_counter.
 
         this._google_tts = new GoogleTTS.GoogleTTS();
         this._listen_source_button = new ListenButton();
         this._listen_source_button.hide();
-        this._listen_source_button.actor.connect('clicked',
-            () => {
-                this.google_tts.speak(
-                    this._source.text,
-                    this._text_translator.current_source_lang
-                )
-            })
+        this._listen_source_button.actor.connect('clicked', () => {
+            this.google_tts.speak(this._source.text, this._text_translator.current_source_lang)
+        })
         this._listen_target_button = new ListenButton();
         this._listen_target_button.hide();
-        this._listen_target_button.actor.connect('clicked',
-            () => {
-                let lines_count = this._source.text.split('\n').length;
-                let translation = this._target.text.split('\n').slice(0, lines_count).join('\n');
-                this.google_tts.speak(
-                    translation,
-                    this._text_translator.current_target_lang
-                )
-            })
+        this._listen_target_button.actor.connect('clicked', () => {
+            let lines_count = this._source.text.split('\n').length;
+            let translation = this._target.text.split('\n')
+                .slice(0, lines_count)
+                .join('\n');
+            this.google_tts.speak(translation, this._text_translator.current_target_lang);
+        })
 
         this._grid_layout = new Clutter.GridLayout({
             orientation: Clutter.Orientation.VERTICAL
@@ -384,51 +348,51 @@ var TranslatorDialog = class TranslatorDialog extends ModalDialog.ModalDialog {
     _on_source_changed() {
         this._chars_counter.current_length = this._source.length;
 
-        if(!this._source.is_empty) this._listen_source_button.show();
-        else this._listen_source_button.hide();
+        if (!this._source.is_empty) {
+            this._listen_source_button.show();
+        } else {
+            this._listen_source_button.hide();
+        }
     }
 
     _on_target_changed() {
-        if(!this._target.is_empty) this._listen_target_button.show();
-        else this._listen_target_button.hide();
+        if (!this._target.is_empty) {
+            this._listen_target_button.show();
+        } else {
+            this._listen_target_button.hide();
+        }
     }
 
     _init_scroll_sync() {
-        if(Utils.SETTINGS.get_boolean(PrefsKeys.SYNC_ENTRIES_SCROLL_KEY)) {
+        if (Utils.SETTINGS.get_boolean(PrefsKeys.SYNC_ENTRIES_SCROLL_KEY)) {
             this.sync_entries_scroll();
         }
-        this._connection_ids.sync_scroll_settings = Utils.SETTINGS.connect(
-            'changed::'+PrefsKeys.SYNC_ENTRIES_SCROLL_KEY,
-            () => {
-                let sync = Utils.SETTINGS.get_boolean(
-                    PrefsKeys.SYNC_ENTRIES_SCROLL_KEY
-                );
+        this._connection_ids.sync_scroll_settings = Utils.SETTINGS.connect('changed::' + PrefsKeys.SYNC_ENTRIES_SCROLL_KEY, () => {
+            let sync = Utils.SETTINGS.get_boolean(PrefsKeys.SYNC_ENTRIES_SCROLL_KEY);
 
-                if(sync) this.sync_entries_scroll();
-                else this.unsync_entries_scroll();
+            if (sync) {
+                this.sync_entries_scroll();
+            } else {
+                this.unsync_entries_scroll();
             }
-        );
+        });
     }
 
     _init_most_used_bar() {
-        if(Utils.SETTINGS.get_boolean(PrefsKeys.SHOW_MOST_USED_KEY)) {
+        if (Utils.SETTINGS.get_boolean(PrefsKeys.SHOW_MOST_USED_KEY)) {
             this._show_most_used_bar();
         }
-        this._connection_ids.show_most_used = Utils.SETTINGS.connect(
-            'changed::%s'.format(PrefsKeys.SHOW_MOST_USED_KEY),
-            () => {
-                if(Utils.SETTINGS.get_boolean(PrefsKeys.SHOW_MOST_USED_KEY)) {
-                    this._show_most_used_bar();
-                }
-                else {
-                    this._hide_most_used_bar();
-                }
+        this._connection_ids.show_most_used = Utils.SETTINGS.connect('changed::%s'.format(PrefsKeys.SHOW_MOST_USED_KEY), () => {
+            if (Utils.SETTINGS.get_boolean(PrefsKeys.SHOW_MOST_USED_KEY)) {
+                this._show_most_used_bar();
+            } else {
+                this._hide_most_used_bar();
             }
-        );
+        });
     }
 
     _show_most_used_bar() {
-        if(!this._most_used_bar) {
+        if (!this._most_used_bar) {
             this._most_used_sources = new LanguagesButtons.LanguagesButtons();
             this._most_used_targets = new LanguagesButtons.LanguagesButtons();
             this._most_used_bar = true;
@@ -440,7 +404,7 @@ var TranslatorDialog = class TranslatorDialog extends ModalDialog.ModalDialog {
     }
 
     _hide_most_used_bar() {
-        if(this._most_used_bar) {
+        if (this._most_used_bar) {
             this._topbar.actor.set_style("padding-bottom: 10px;");
             this._most_used_sources.destroy();
             this._most_used_targets.destroy();
@@ -456,42 +420,20 @@ var TranslatorDialog = class TranslatorDialog extends ModalDialog.ModalDialog {
     }
 
     _resize() {
-        let width_percents = Utils.SETTINGS.get_int(
-            PrefsKeys.WIDTH_PERCENTS_KEY
-        );
-        let height_percents = Utils.SETTINGS.get_int(
-            PrefsKeys.HEIGHT_PERCENTS_KEY
-        );
+        let width_percents = Utils.SETTINGS.get_int(PrefsKeys.WIDTH_PERCENTS_KEY);
+        let height_percents = Utils.SETTINGS.get_int(PrefsKeys.HEIGHT_PERCENTS_KEY);
         let primary = Main.layoutManager.primaryMonitor;
 
         let box_width = Math.round(primary.width / 100 * width_percents);
         let box_height = Math.round(primary.height / 100 * height_percents);
-        this._dialogLayout.set_width(
-            box_width
-            + this._dialogLayout.get_theme_node().get_padding(St.Side.LEFT) * 2
-        );
-        this._dialogLayout.set_height(
-            box_height
-            + this._dialogLayout.get_theme_node().get_padding(St.Side.TOP) * 2
-        );
+        this._dialogLayout.set_width(box_width + this._dialogLayout.get_theme_node().get_padding(St.Side.LEFT) * 2);
+        this._dialogLayout.set_height(box_height + this._dialogLayout.get_theme_node().get_padding(St.Side.TOP) * 2);
 
-        let text_box_width = Math.round(
-            box_width / 2
-            - 10 // The margin of the translator box
-        );
-        let text_box_height =
-            box_height
-            - this._topbar.actor.height
-            - Math.max(
-                this._get_statusbar_height(),
-                this._chars_counter.actor.height
-            ) ;
+        let text_box_width = Math.round(box_width / 2 - 10 /* The margin of the translator box */ );
+        let text_box_height = box_height - this._topbar.actor.height - Math.max(this._get_statusbar_height(), this._chars_counter.actor.height);
 
-        if(this._most_used_bar) {
-            text_box_height -= Math.max(
-                this._most_used_sources.actor.height,
-                this._most_used_targets.actor.height
-            );
+        if (this._most_used_bar) {
+            text_box_height -= Math.max(this._most_used_sources.actor.height, this._most_used_targets.actor.height);
         }
 
         this._source.set_size(text_box_width, text_box_height - 100);
@@ -499,52 +441,42 @@ var TranslatorDialog = class TranslatorDialog extends ModalDialog.ModalDialog {
     }
 
     sync_entries_scroll() {
-        if(this._connection_ids.source_scroll < 1) {
+        if (this._connection_ids.source_scroll < 1) {
             let source_v_adjust = this._source.scroll.vscroll.adjustment;
-            this._connection_ids.source_scroll = source_v_adjust.connect(
-                'notify::value',
-                (adjustment) => {
-                    let target_adjustment =
-                        this._target.scroll.vscroll.adjustment;
+            this._connection_ids.source_scroll = source_v_adjust.connect('notify::value', (adjustment) => {
+                let target_adjustment = this._target.scroll.vscroll.adjustment;
 
-                    if(target_adjustment.value === adjustment.value) return;
-                    target_adjustment.value = adjustment.value;
-                    adjustment.upper =
-                        adjustment.upper > target_adjustment.upper
-                        ? adjustment.upper
-                        : target_adjustment.upper;
+                if (target_adjustment.value === adjustment.value) {
+                    return;
                 }
-            );
+                target_adjustment.value = adjustment.value;
+                adjustment.upper = adjustment.upper > target_adjustment.upper ? adjustment.upper : target_adjustment.upper;
+            });
         }
 
-        if(this._connection_ids.target_scroll < 1) {
+        if (this._connection_ids.target_scroll < 1) {
             let target_v_adjust = this._target.scroll.vscroll.adjustment;
-            this._connection_ids.target_scroll = target_v_adjust.connect(
-                'notify::value',
-                (adjustment) => {
-                    let source_adjustment =
-                        this._source.scroll.vscroll.adjustment;
+            this._connection_ids.target_scroll = target_v_adjust.connect('notify::value', (adjustment) => {
+                let source_adjustment = this._source.scroll.vscroll.adjustment;
 
-                    if(source_adjustment.value === adjustment.value) return;
-                    source_adjustment.value = adjustment.value;
-
-                    adjustment.upper =
-                        adjustment.upper > source_adjustment.upper
-                        ? adjustment.upper
-                        : source_adjustment.upper;
+                if (source_adjustment.value === adjustment.value) {
+                    return;
                 }
-            );
+                source_adjustment.value = adjustment.value;
+
+                adjustment.upper = adjustment.upper > source_adjustment.upper ? adjustment.upper : source_adjustment.upper;
+            });
         }
     }
 
     unsync_entries_scroll() {
-        if(this._connection_ids.source_scroll > 0) {
+        if (this._connection_ids.source_scroll > 0) {
             let source_v_adjust = this._source.scroll.vscroll.adjustment;
             source_v_adjust.disconnect(this._connection_ids.source_scroll);
             this._connection_ids.source_scroll = 0;
         }
 
-        if(this._connection_ids.target_scroll > 0) {
+        if (this._connection_ids.target_scroll > 0) {
             let target_v_adjust = this._target.scroll.vscroll.adjustment;
             target_v_adjust.disconnect(this._connection_ids.target_scroll);
             this._connection_ids.target_scroll = 0;
@@ -562,10 +494,10 @@ var TranslatorDialog = class TranslatorDialog extends ModalDialog.ModalDialog {
     }
 
     destroy() {
-        if(this._connection_ids.sync_scroll_settings > 0) {
+        if (this._connection_ids.sync_scroll_settings > 0) {
             Utils.SETTINGS.disconnect(this._connection_ids.sync_scroll_settings);
         }
-        if(this._connection_ids.show_most_used > 0) {
+        if (this._connection_ids.show_most_used > 0) {
             Utils.SETTINGS.disconnect(this._connection_ids.show_most_used);
         }
 

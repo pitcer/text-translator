@@ -33,7 +33,9 @@ var CharsCounter = class CharsCounter {
     }
 
     _show() {
-        if(this.actor.visible) return;
+        if (this.actor.visible) {
+            return;
+        }
 
         this.actor.opacity = 0;
         this.actor.show();
@@ -46,7 +48,9 @@ var CharsCounter = class CharsCounter {
     }
 
     _hide() {
-        if(!this.actor.visible) return;
+        if (!this.actor.visible) {
+            return;
+        }
 
         Tweener.addTween(this.actor, {
             time: 0.3,
@@ -60,12 +64,14 @@ var CharsCounter = class CharsCounter {
     }
 
     _maybe_show() {
-        if(this._max_length < 1 || this._current_length < 1) {
+        if (this._max_length < 1 || this._current_length < 1) {
             this._hide();
             return;
         }
 
-        if(this.actor.visible) return;
+        if (this.actor.visible) {
+            return;
+        }
 
         this._show();
     }
@@ -75,12 +81,9 @@ var CharsCounter = class CharsCounter {
 
         let markup;
 
-        if(this._current_length >= this._max_length) {
-            markup = '<span color="red"><b>%s</b></span>'.format(
-                this._current_length.toString()
-            );
-        }
-        else {
+        if (this._current_length >= this._max_length) {
+            markup = '<span color="red"><b>%s</b></span>'.format(this._current_length.toString());
+        } else {
             markup = this._current_length.toString();
         }
 

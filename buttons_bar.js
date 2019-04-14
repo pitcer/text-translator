@@ -239,8 +239,7 @@ var ButtonsBar = class ButtonsBar {
     }
 
     clear() {
-        for(let i = 0; i < this._buttons.length; i++) {
-            let button = this._buttons[i];
+        for (let button of this._buttons) {
             button.destroy();
         }
     }

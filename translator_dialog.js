@@ -17,7 +17,7 @@ const PrefsKeys = Me.imports.prefs_keys;
 const Utils = Me.imports.utils;
 const GoogleTTS = Me.imports.google_tts;
 
-const EntryBase = class {
+const EntryBase = class EntryBase {
 
     constructor(params) {
         this.params = Params.parse(params, {
@@ -220,7 +220,7 @@ const EntryBase = class {
 }
 Signals.addSignalMethods(EntryBase.prototype);
 
-const SourceEntry = class extends EntryBase {
+const SourceEntry = class SourceEntry extends EntryBase {
 
     constructor() {
         super({
@@ -235,7 +235,7 @@ const SourceEntry = class extends EntryBase {
     }
 }
 
-const TargetEntry = class extends EntryBase {
+const TargetEntry = class TargetEntry extends EntryBase {
 
     constructor() {
         super({
@@ -247,7 +247,7 @@ const TargetEntry = class extends EntryBase {
     }
 }
 
-const ListenButton = class {
+const ListenButton = class ListenButton {
 
     constructor() {
         this.actor = new St.Button({
@@ -280,7 +280,7 @@ const ListenButton = class {
     }
 }
 
-const TranslatorDialog = class extends ModalDialog.ModalDialog {
+var TranslatorDialog = class TranslatorDialog extends ModalDialog.ModalDialog {
 
     constructor(text_translator) {
         super({
@@ -552,7 +552,7 @@ const TranslatorDialog = class extends ModalDialog.ModalDialog {
     }
 
     open() {
-        this.parent();
+        super.open();
         this._resize();
     }
 

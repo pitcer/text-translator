@@ -79,7 +79,7 @@ const LANGUAGES_LIST = {
     "zh-TW": "Chinese Traditional"
 };
 
-const TranslationProviderPrefs = class {
+const TranslationProviderPrefs = class TranslationProviderPrefs {
 
     constructor(provider_name) {
         this._name = provider_name;
@@ -209,7 +209,7 @@ const TranslationProviderPrefs = class {
     }
 }
 
-const TranslationProviderBase = class {
+var TranslationProviderBase = class TranslationProviderBase {
 
     constructor(name, limit, url) {
         this._name = name;

@@ -9,7 +9,7 @@ const Utils = Me.imports.utils;
 const TranslationProviderBase =
     Me.imports.translation_provider_base.TranslationProviderBase;
 
-const TranslatorsManager = class {
+const TranslatorsManager = class TranslatorsManager {
 
     constructor(extension_object) {
         this._extension_object = extension_object;

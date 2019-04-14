@@ -8,7 +8,7 @@ const Utils = Me.imports.utils;
 const TYPE_SOURCE = 'source';
 const TYPE_TARGET = 'target';
 
-const LanguagesStats = class {
+const LanguagesStats = class LanguagesStats {
 
     constructor() {
         this._reload();

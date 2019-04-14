@@ -60,7 +60,7 @@ const CONNECTION_IDS = {
 
 const INSTANT_TRANSLATION_DELAY = 1000; // ms
 
-const TranslatorPanelButton = class extends PanelMenu.Button {
+const TranslatorPanelButton = class TranslatorPanelButton extends PanelMenu.Button {
 
     constructor(translator) {
         super(0.0, 'text-translator');
@@ -198,7 +198,7 @@ const TranslatorPanelButton = class extends PanelMenu.Button {
     }
 }
 
-const TranslatorsPopup = class extends PopupMenu.PopupMenu {
+const TranslatorsPopup = class TranslatorsPopup extends PopupMenu.PopupMenu {
 
     constructor(button, dialog) {
         super(button.actor, 0, St.Side.TOP);
@@ -240,12 +240,12 @@ const TranslatorsPopup = class extends PopupMenu.PopupMenu {
         this._button.set_sensitive(false);
         this._button.actor.add_style_pseudo_class('active');
         this.box.add(this._label_menu_item);
-        this.parent(true);
+        super.open(true);
         this.firstMenuItem.actor.grab_key_focus();
     }
 
     close() {
-        this.parent(true);
+        super.close(true);
         this._button.set_sensitive(true);
         this._button.actor.remove_style_pseudo_class('active');
         this._dialog.source.grab_key_focus();
@@ -263,7 +263,7 @@ const TranslatorsPopup = class extends PopupMenu.PopupMenu {
     }
 }
 
-const TranslatorExtension = class {
+const TranslatorExtension = class TranslatorExtension {
 
     constructor() {
         this._dialog = new TranslatorDialog.TranslatorDialog(this);

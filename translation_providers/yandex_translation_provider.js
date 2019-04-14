@@ -3,7 +3,7 @@ const TranslationProviderBase = Extension.imports.translation_provider_base;
 
 const ENGINE = 'Yandex'
 
-const Translator = class extends TranslationProviderBase.TranslationProviderBase {
+const Translator = class Translator extends TranslationProviderBase.TranslationProviderBase {
 
     constructor() {
         super(ENGINE + '.Translate');

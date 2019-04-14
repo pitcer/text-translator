@@ -17,7 +17,7 @@ const MESSAGE_TYPES = {
 
 const MAX_MESSAGE_LENGTH = 60;
 
-const StatusBarMessage = class {
+const StatusBarMessage = class StatusBarMessage {
 
     constructor(text, timeout, type, has_spinner) {
         this._text = text;
@@ -72,7 +72,7 @@ const StatusBarMessage = class {
     }
 }
 
-const StatusBar = class {
+const StatusBar = class StatusBar {
 
     constructor(params) {
         this.actor = new St.BoxLayout({

@@ -18,6 +18,7 @@ const PanelMenu = imports.ui.panelMenu;
 
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
+const GObject = imports.gi.GObject;
 
 const Me = ExtensionUtils.getCurrentExtension();
 const Utils = Me.imports.utils;
@@ -56,10 +57,11 @@ const CONNECTION_IDS = {
 
 const INSTANT_TRANSLATION_DELAY = 1000; // ms
 
-const TranslatorPanelButton = class TranslatorPanelButton extends PanelMenu.Button {
+const TranslatorPanelButton = GObject.registerClass(
+    class TranslatorPanelButton extends PanelMenu.Button {
 
-    constructor(translator) {
-        super(0.0, 'text-translator');
+    _init(translator) {
+        super._init(0.0, 'text-translator', false);
         this.actor.reactive = false;
 
         this._translator = translator;
@@ -78,8 +80,6 @@ const TranslatorPanelButton = class TranslatorPanelButton extends PanelMenu.Butt
     }
 
     _add_menu_items() {
-        let menu_item;
-
         this._item_open = new PopupMenu.PopupMenuItem('Open');
         this._item_open.connect('activate', () => {
             this._translator.open();
@@ -173,7 +173,7 @@ const TranslatorPanelButton = class TranslatorPanelButton extends PanelMenu.Butt
 
         this.menu.toggle();
     }
-}
+});
 
 const TranslatorsPopup = class TranslatorsPopup extends PopupMenu.PopupMenu {
 

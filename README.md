@@ -23,7 +23,7 @@ For full install instructions see [translate-shell#installation](https://github.
 
 ## Installation
 
-Go on the [Text Translator](https://extensions.gnome.org/extension/593/text-translator/) extension page, click on the switch ("OFF" => "ON"), click on the install button. That's it !
+Go on the [Text Translator](https://extensions.gnome.org/extension/1756/text-translator/) extension page, click on the switch ("OFF" => "ON"), click on the install button. That's it !
 
 ## Shortcuts
 

@@ -1,4 +1,5 @@
 const St = imports.gi.St;
+const GObject = imports.gi.GObject;
 const Main = imports.ui.main;
 const ModalDialog = imports.ui.modalDialog;
 const Clutter = imports.gi.Clutter;
@@ -258,10 +259,11 @@ const ListenButton = class ListenButton {
     }
 }
 
-var TranslatorDialog = class TranslatorDialog extends ModalDialog.ModalDialog {
+var TranslatorDialog = GObject.registerClass(
+    class TranslatorDialog extends ModalDialog.ModalDialog {
 
-    constructor(text_translator) {
-        super({
+    _init(text_translator) {
+        super._init({
             shellReactive: false,
             destroyOnClose: false
         });
@@ -550,4 +552,4 @@ var TranslatorDialog = class TranslatorDialog extends ModalDialog.ModalDialog {
     get google_tts() {
         return this._google_tts;
     }
-}
+});

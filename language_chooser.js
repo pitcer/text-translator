@@ -1,4 +1,5 @@
 const St = imports.gi.St;
+const GObject = imports.gi.GObject;
 const Main = imports.ui.main;
 const ModalDialog = imports.ui.modalDialog;
 const Clutter = imports.gi.Clutter;
@@ -11,10 +12,15 @@ const PrefsKeys = Me.imports.prefs_keys;
 
 const COLUMNS = 4;
 
-var LanguageChooser = class LanguageChooser extends ModalDialog.ModalDialog {
+var LanguageChooser = GObject.registerClass({
+        Signals: {
+            'language-chose': {}
+        }
+    },
+    class LanguageChooser extends ModalDialog.ModalDialog {
 
-    constructor(title, languages) {
-        super({
+    _init(title, languages) {
+        super._init({
             destroyOnClose: false
         });
 
@@ -255,5 +261,4 @@ var LanguageChooser = class LanguageChooser extends ModalDialog.ModalDialog {
         this._resize();
         super.open();
     }
-}
-Signals.addSignalMethods(LanguageChooser.prototype);
+});

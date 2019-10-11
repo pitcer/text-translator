@@ -1,4 +1,5 @@
 const St = imports.gi.St;
+const GObject = imports.gi.GObject;
 const Main = imports.ui.main;
 const Clutter = imports.gi.Clutter;
 const ModalDialog = imports.ui.modalDialog;
@@ -8,10 +9,11 @@ const Me = ExtensionUtils.getCurrentExtension();
 const Utils = Me.imports.utils;
 const PrefsKeys = Me.imports.prefs_keys;
 
-var HelpDialog = class HelpDialog extends ModalDialog.ModalDialog {
+var HelpDialog = GObject.registerClass(
+    class HelpDialog extends ModalDialog.ModalDialog {
 
-    constructor() {
-        super();
+    _init() {
+        super._init();
 
         this._dialogLayout = typeof this.dialogLayout === "undefined" ? this._dialogLayout : this.dialogLayout;
         this._dialogLayout.connect('key-press-event', (object, event) => {
@@ -102,4 +104,4 @@ var HelpDialog = class HelpDialog extends ModalDialog.ModalDialog {
         this._resize();
         super.open();
     }
-}
+});

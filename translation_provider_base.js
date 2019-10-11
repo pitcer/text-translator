@@ -262,7 +262,7 @@ var TranslationProviderBase = class TranslationProviderBase {
         ];
 
 
-        this._exec(command, (out, err) => {
+        this._exec(command).then((out, err) => {
             callback(err ? this._escape_html('Please make sure both gawk and translate-shell are installed. Error: ' + err) : this._escape_translation(out));
         });
     }
@@ -300,35 +300,27 @@ var TranslationProviderBase = class TranslationProviderBase {
             .replace(/>/g, '&gt;');
     }
 
-    _exec(cmd, exec_cb) {
-
+    async _exec(command) {
         try {
-            var [res, pid, in_fd, out_fd, err_fd] = GLib.spawn_async_with_pipes(null, cmd, null, GLib.SpawnFlags.SEARCH_PATH, null);
-            var out_reader = new Gio.DataInputStream({
-                base_stream: new Gio.UnixInputStream({
-                    fd: out_fd
-                })
+            let proc = new Gio.Subprocess({
+                argv: command,
+                flags: Gio.SubprocessFlags.STDOUT_PIPE
             });
-        } catch (e) {
-            exec_cb && exec_cb(null, e);
-            return;
+            proc.init(null);
+            return await new Promise((resolve, reject) => {
+                proc.communicate_utf8_async(null, null, (proc, res) => {
+                    try {
+                        let [ok, stdout, stderr] = proc.communicate_utf8_finish(res);
+                        resolve(stdout);
+                    } catch(error) {
+                        reject(error);
+                    }
+                });
+            });
+        } catch (error) {
+            logError(error);
         }
-
-
-        let output = '';
-
-        function _SocketRead(source_object, res) {
-            const [chunk, length] = out_reader.read_upto_finish(res);
-            if (chunk !== null) {
-                output += chunk + '\n';
-                out_reader.read_line_async(null, null, _SocketRead);
-            } else {
-                exec_cb && exec_cb(output);
-            }
-        }
-        out_reader.read_line_async(null, null, _SocketRead);
     }
-
 
     get name() {
         return this._name;
